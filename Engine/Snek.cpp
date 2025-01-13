@@ -12,9 +12,9 @@ void Snek::Segment::InitHead(const Location& in_loc)
 	c = Snek::headColor;
 }
 
-void Snek::Segment::InitBody()
+void Snek::Segment::InitBody(const Color bodyColor)
 {
-	c = Snek::bodyColor;
+	c = bodyColor;
 }
 
 void Snek::Segment::Follow(const Segment& next)
@@ -36,7 +36,18 @@ const Location& Snek::Segment::GetLocation() const
 
 Snek::Snek(const Location& loc)
 {
+	constexpr int nBodyColors = 4;
+	constexpr Color bodyColors[4] = {
+		{10, 100, 32},
+		{10, 130, 48},
+		{18, 160, 48},
+		{10, 130, 48}
+	};
 	segments[0].InitHead(loc);
+	for (int i = 1; i < nSegmentsMax; ++i)
+	{
+		segments[i].InitBody(bodyColors[i % nBodyColors]);
+	}
 }
 
 void Snek::Draw(Board& brd) const
@@ -60,7 +71,6 @@ void Snek::Grow()
 {
 	if (nSegments < nSegmentsMax)
 	{
-		segments[nSegments].InitBody();
 		++nSegments;
 	}
 }
