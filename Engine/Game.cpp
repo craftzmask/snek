@@ -45,19 +45,19 @@ void Game::UpdateModel()
 {
 	if (gameStarted && !gameIsOver)
 	{
-		if (wnd.kbd.KeyIsPressed(VK_UP))
+		if (wnd.kbd.KeyIsPressed(VK_UP) && delta_loc.y != 1)
 		{
 			delta_loc = { 0, -1 };
 		}
-		if (wnd.kbd.KeyIsPressed(VK_DOWN))
+		if (wnd.kbd.KeyIsPressed(VK_DOWN) && delta_loc.y != -1)
 		{
 			delta_loc = { 0, 1 };
 		}
-		if (wnd.kbd.KeyIsPressed(VK_LEFT))
+		if (wnd.kbd.KeyIsPressed(VK_LEFT) && delta_loc.x != 1)
 		{
 			delta_loc = { -1, 0 };
 		}
-		if (wnd.kbd.KeyIsPressed(VK_RIGHT))
+		if (wnd.kbd.KeyIsPressed(VK_RIGHT) && delta_loc.x != -1)
 		{
 			delta_loc = { 1, 0 };
 		}
