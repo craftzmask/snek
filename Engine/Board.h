@@ -16,8 +16,9 @@ public:
 private:
 	int x = 20;
 	int y = 20;
-	static constexpr int padding = 2;
+	static constexpr int cellPadding = 1;
 	static constexpr int borderWidth = 5;
+	static constexpr int borderPadding = 4;
 	static constexpr int width = 37;
 	static constexpr int height = 27;
 	static constexpr int dimension = 20;

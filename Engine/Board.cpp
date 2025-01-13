@@ -8,14 +8,11 @@ Board::Board(Graphics& gfx)
 
 void Board::DrawCell(const Location& loc, const Color c) const
 {
-	//gfx.DrawRectDim(x + (loc.x * dimension), y + (loc.y * dimension), dimension, dimension, Colors::Gray);
-	const int offsetX = x + borderWidth + padding;
-	const int offsetY = y + borderWidth + padding;
-	const int x0 = offsetX + (loc.x * dimension) + padding;
-	const int y0 = offsetY + (loc.y * dimension) + padding;
-	const int x1 = x0 + dimension - padding * 2;
-	const int y1 = y0 + dimension - padding * 2;
-	gfx.DrawRect(x0, y0, x1, y1, c);
+	const int offsetX = x + borderWidth + borderPadding;
+	const int offsetY = y + borderWidth + borderPadding;
+	const int x0 = offsetX + (loc.x * dimension) + cellPadding;
+	const int y0 = offsetY + (loc.y * dimension) + cellPadding;
+	gfx.DrawRectDim(x0, y0, dimension - cellPadding * 2, dimension - cellPadding * 2, c);
 }
 
 int Board::GetWidth() const
@@ -35,18 +32,20 @@ bool Board::IsInsideBoard(const Location& loc) const
 
 void Board::DrawBorder() const
 {
-	const int screenWidth = 2 * padding + 2 * borderWidth + width * dimension;
-	const int screenHeight = 2 * padding + 2 * borderWidth + height * dimension;
+	const int top = y;
+	const int bottom = top + 2 * (borderWidth + borderPadding) + height * dimension;
+	const int left = x;
+	const int right = left + 2 * (borderWidth + borderPadding) + width * dimension;
 
 	// Draw Top
-	gfx.DrawRectDim(x, y, screenWidth, borderWidth, Colors::Blue);
+	gfx.DrawRectDim(left, top, right - left, borderWidth, Colors::Blue);
 
 	// Draw Bottom
-	gfx.DrawRectDim(x, y + screenHeight - borderWidth, screenWidth, borderWidth, Colors::Blue);
+	gfx.DrawRectDim(x, bottom - borderWidth, right - left, borderWidth, Colors::Blue);
 
 	// Draw Left
-	gfx.DrawRectDim(x, y, borderWidth, screenHeight, Colors::Blue);
+	gfx.DrawRectDim(x, y, borderWidth, bottom - top, Colors::Blue);
 
 	// Draw Right
-	gfx.DrawRectDim(x + screenWidth - borderWidth, y, borderWidth, screenHeight, Colors::Blue);
+	gfx.DrawRectDim(right - borderWidth, y, borderWidth, bottom - top, Colors::Blue);
 }
