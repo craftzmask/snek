@@ -26,6 +26,7 @@
 #include "Board.h"
 #include "Snek.h"
 #include "Goal.h"
+#include "FrameTimer.h"
 
 class Game
 {
@@ -45,17 +46,16 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	FrameTimer ft;
 	std::mt19937 rng;
 	Board brd;
 	Snek snek;
 	Goal goal;
 	Location delta_loc = { 1, 0 };
-	static constexpr int snekMovePeriod = 20;
-	static constexpr int snekMoveSpeedMax = 10;
-	static constexpr int eatingCounterMax = 5;
-	int snekMoveCounter = 0;
-	int snekMoveSpeed = 1;
-	int eatingCounter = 0;
+	static constexpr float snekMovePeriodMin = 0.1f;		// snek moves by 1 location in minimum 0.1 seconds
+	static constexpr float snekSpeedUpFactor = 0.001f;		// reduce time move by this amount
+	float snekMovePeriod = 0.3f;							// snek moves by 1 location in X seconds
+	float snekMoveCounter = 0.0f;							// keep track the current time passed to move snek
 	bool gameStarted = false;
 	bool gameIsOver = false;
 	/********************************/
