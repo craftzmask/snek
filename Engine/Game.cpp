@@ -65,8 +65,9 @@ void Game::UpdateModel()
 		}
 
 		rockCounterPeriod += dt;
-
 		snekMoveCounter += dt;
+		goalPeriodCounter += dt;
+
 		if (snekMoveCounter >= snekMovePeriod)
 		{
 			snekMoveCounter -= snekMovePeriod;
@@ -97,9 +98,10 @@ void Game::UpdateModel()
 
 				snek.MoveBy(delta_loc);
 
-				if (eating)
+				if (eating || goalPeriodCounter >= goalExistedPeriod)
 				{
 					goal.Respawn(rng, brd, snek);
+					goalPeriodCounter = 0.0f;
 				}
 
 				// Spawn a rock after a period of time

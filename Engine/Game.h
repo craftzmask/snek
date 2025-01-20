@@ -62,6 +62,8 @@ private:
 	static constexpr float snekSpeedUpFactor = 0.001f;		// reduce time move by this amount
 	float snekMovePeriod = 0.3f;							// snek moves by 1 location in X seconds
 	float snekMoveCounter = 0.0f;							// keep track the current time passed to move snek
+	static constexpr float goalExistedPeriod = 10.0f;
+	float goalPeriodCounter = 0.0f;
 	bool gameStarted = false;
 	bool gameIsOver = false;
 	/********************************/
