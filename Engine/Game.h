@@ -25,7 +25,6 @@
 #include "Graphics.h"
 #include "Board.h"
 #include "Snek.h"
-#include "Rock.h"
 #include "FrameTimer.h"
 
 class Game

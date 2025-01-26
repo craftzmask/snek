@@ -30,6 +30,9 @@ public:
 	void RespawnGoal(std::mt19937& rng, const class Snek& snek);
 
 private:
+	void DrawCells(const bool field[], Color color) const;
+
+private:
 	static constexpr Color borderColor = Colors::Blue;
 	static constexpr Color obstacleColor = Colors::Gray;
 	static constexpr Color poisonColor = Colors::Magenta;

@@ -1,6 +1,5 @@
 #include "Board.h"
 #include "Snek.h"
-#include "Goal.h"
 
 Board::Board(Graphics& gfx)
 	:
@@ -69,30 +68,13 @@ void Board::DestroyPoison(const Location& loc)
 
 void Board::DrawObstacles(Graphics& gfx) const
 {
-	for (int y = 0; y < height; y++)
-	{
-		for (int x = 0; x < width; x++)
-		{
-			if (hasObstacles[y * width + x])
-			{
-				DrawCell({ x, y }, obstacleColor);
-			}
-		}
-	}
+	DrawCells(hasObstacles, obstacleColor);
 }
 
 void Board::DrawPoisons(Graphics& gfx) const
 {
-	for (int y = 0; y < height; y++)
-	{
-		for (int x = 0; x < width; x++)
-		{
-			if (hasPoisons[y * width + x])
-			{
-				DrawCell({ x, y }, poisonColor);
-			}
-		}
-	}
+
+	DrawCells(hasPoisons, poisonColor);
 }
 
 void Board::RespawnObstacle(std::mt19937& rng, const Snek& snek)
@@ -135,16 +117,7 @@ void Board::DestroyGoal(const Location& loc)
 
 void Board::DrawGoals(Graphics& gfx) const
 {
-	for (int y = 0; y < height; y++)
-	{
-		for (int x = 0; x < width; x++)
-		{
-			if (hasGoals[y * width + x])
-			{
-				DrawCell({ x, y }, goalColor);
-			}
-		}
-	}
+	DrawCells(hasGoals, goalColor);
 }
 
 void Board::RespawnGoal(std::mt19937& rng, const Snek& snek)
@@ -159,5 +132,19 @@ void Board::RespawnGoal(std::mt19937& rng, const Snek& snek)
 	} while (snek.IsInTile(newLoc) || CheckObstacle(newLoc) || CheckPoison(newLoc));
 
 	hasGoals[newLoc.y * width + newLoc.x] = true;
+}
+
+void Board::DrawCells(const bool field[], Color color) const
+{
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if (field[y * width + x])
+			{
+				DrawCell({ x, y }, color);
+			}
+		}
+	}
 }
 
