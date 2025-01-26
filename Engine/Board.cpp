@@ -95,7 +95,7 @@ void Board::DrawPoisons(Graphics& gfx) const
 	}
 }
 
-void Board::RespawnObstacle(std::mt19937& rng, const Snek& snek, const Goal& goal)
+void Board::RespawnObstacle(std::mt19937& rng, const Snek& snek)
 {
 	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
 	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
@@ -104,12 +104,12 @@ void Board::RespawnObstacle(std::mt19937& rng, const Snek& snek, const Goal& goa
 	do
 	{
 		newLoc = { xDist(rng), yDist(rng) };
-	} while (snek.IsInTile(newLoc) || CheckObstacle(newLoc) || goal.GetLocation() == newLoc);
+	} while (snek.IsInTile(newLoc) || CheckObstacle(newLoc) || CheckGoal(newLoc));
 
 	hasObstacles[newLoc.y * width + newLoc.x] = true;
 }
 
-void Board::RespawnPoison(std::mt19937& rng, const Snek& snek, const Goal& goal)
+void Board::RespawnPoison(std::mt19937& rng, const Snek& snek)
 {
 	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
 	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
@@ -118,7 +118,7 @@ void Board::RespawnPoison(std::mt19937& rng, const Snek& snek, const Goal& goal)
 	do
 	{
 		newLoc = { xDist(rng), yDist(rng) };
-	} while (snek.IsInTile(newLoc) || CheckObstacle(newLoc) || goal.GetLocation() == newLoc);
+	} while (snek.IsInTile(newLoc) || CheckObstacle(newLoc) || CheckGoal(newLoc));
 
 	hasPoisons[newLoc.y * width + newLoc.x] = true;
 }

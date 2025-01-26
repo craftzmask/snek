@@ -25,7 +25,6 @@
 #include "Graphics.h"
 #include "Board.h"
 #include "Snek.h"
-#include "Goal.h"
 #include "Rock.h"
 #include "FrameTimer.h"
 
@@ -51,7 +50,6 @@ private:
 	std::mt19937 rng;
 	Board brd;
 	Snek snek;
-	Goal goal;
 	Location delta_loc = { 1, 0 };
 	static constexpr float snekMovePeriodMin = 0.1f;		// snek moves by 1 location in minimum 0.1 seconds
 	static constexpr float snekSpeedUpFactor = 0.001f;		// reduce time move by this amount

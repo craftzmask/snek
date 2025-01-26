@@ -17,12 +17,12 @@ public:
 
 	bool CheckObstacle(const Location& loc) const;
 	void DrawObstacles(Graphics& gfx) const;
-	void RespawnObstacle(std::mt19937& rng, const class Snek& snek, const class Goal& goal);
+	void RespawnObstacle(std::mt19937& rng, const class Snek& snek);
 
 	bool CheckPoison(const Location& loc) const;
 	void DestroyPoison(const Location& loc);
 	void DrawPoisons(Graphics& gfx) const;
-	void RespawnPoison(std::mt19937& rng, const class Snek& snek, const class Goal& goal);
+	void RespawnPoison(std::mt19937& rng, const class Snek& snek);
 
 	bool CheckGoal(const Location& loc) const;
 	void DestroyGoal(const Location& loc);

@@ -28,12 +28,11 @@ Game::Game(MainWindow& wnd)
 	gfx(wnd),
 	brd(gfx),
 	rng(std::random_device()()),
-	snek({5, 5}),
-	goal(rng, brd, snek)
+	snek({5, 5})
 {
 	for (int i = 0; i < brd.nPoisons; i++)
 	{
-		brd.RespawnPoison(rng, snek, goal);
+		brd.RespawnPoison(rng, snek);
 	}
 
 	for (int i = 0; i < brd.nGoals; i++)
@@ -88,25 +87,24 @@ void Game::UpdateModel()
 
 			if (!gameIsOver)
 			{
-				const bool eating = brd.CheckGoal(next);
-				if (eating)
+				if (brd.CheckGoal(next))
 				{
 					snek.Grow();
-					brd.DestroyGoal(next);
 				}
 
 				snek.MoveBy(delta_loc);
 
-				if (eating)
+				if (brd.CheckGoal(next))
 				{
+					brd.DestroyGoal(next);
 					brd.RespawnGoal(rng, snek);
-					brd.RespawnObstacle(rng, snek, goal);
+					brd.RespawnObstacle(rng, snek);
 				}
 
 				if (brd.CheckPoison(next))
 				{
 					brd.DestroyPoison(next);
-					brd.RespawnPoison(rng, snek, goal);
+					brd.RespawnPoison(rng, snek);
 					snekMovePeriod = std::max(snekMovePeriod - 2.0f * snekSpeedUpFactor, snekMovePeriodMin);
 				}
 			}
