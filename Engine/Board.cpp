@@ -57,14 +57,14 @@ bool Board::CheckObstacle(const Location& loc) const
 	return hasObstacles[loc.y * width + loc.x];
 }
 
-bool Board::CheckPoison(const Location& loc)
+bool Board::CheckPoison(const Location& loc) const
 {
-	if (hasPoisons[loc.y * width + loc.x])
-	{
-		hasPoisons[loc.y * width + loc.x] = false;
-		return true;
-	}
-	return false;
+	return hasPoisons[loc.y * width + loc.x];
+}
+
+void Board::DestroyPoison(const Location& loc)
+{
+	hasPoisons[loc.y * width + loc.x] = false;
 }
 
 void Board::DrawObstacles(Graphics& gfx) const
@@ -123,7 +123,41 @@ void Board::RespawnPoison(std::mt19937& rng, const Snek& snek, const Goal& goal)
 	hasPoisons[newLoc.y * width + newLoc.x] = true;
 }
 
-int Board::GetNumberOfPoisons() const
+bool Board::CheckGoal(const Location& loc) const
 {
-	return nPoisons;
+	return hasGoals[loc.y * width + loc.x];
 }
+
+void Board::DestroyGoal(const Location& loc)
+{
+	hasGoals[loc.y * width + loc.x] = false;
+}
+
+void Board::DrawGoals(Graphics& gfx) const
+{
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if (hasGoals[y * width + x])
+			{
+				DrawCell({ x, y }, goalColor);
+			}
+		}
+	}
+}
+
+void Board::RespawnGoal(std::mt19937& rng, const Snek& snek)
+{
+	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
+	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
+
+	Location newLoc;
+	do
+	{
+		newLoc = { xDist(rng), yDist(rng) };
+	} while (snek.IsInTile(newLoc) || CheckObstacle(newLoc) || CheckPoison(newLoc));
+
+	hasGoals[newLoc.y * width + newLoc.x] = true;
+}
+
