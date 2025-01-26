@@ -69,7 +69,6 @@ void Game::UpdateModel()
 		}
 
 		snekMoveCounter += dt;
-		goalPeriodCounter += dt;
 
 		if (snekMoveCounter >= snekMovePeriod)
 		{
@@ -92,15 +91,10 @@ void Game::UpdateModel()
 
 				snek.MoveBy(delta_loc);
 
-				if (eating || goalPeriodCounter >= goalExistedPeriod)
-				{
-					goal.Respawn(rng, brd, snek);
-					goalPeriodCounter = 0.0f;
-				}
-
 				if (eating)
 				{
 					brd.RespawnObstacle(rng, snek, goal);
+					goal.Respawn(rng, brd, snek);
 				}
 
 				if (brd.CheckPoison(next))
@@ -110,8 +104,6 @@ void Game::UpdateModel()
 				}
 			}
 		}
-
-		//snekMovePeriod = std::max(snekMovePeriod - dt * snekSpeedUpFactor, snekMovePeriodMin);
 	}
 	else if (wnd.kbd.KeyIsPressed(VK_RETURN))
 	{
