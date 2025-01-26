@@ -31,6 +31,8 @@ public:
 
 private:
 	void DrawCells(const bool field[], Color color) const;
+	void Respawn(bool field[], std::mt19937& rng, const class Snek& snek) const;
+	bool IsCellEmpty(const Location& loc) const;
 
 private:
 	static constexpr Color borderColor = Colors::Blue;
@@ -52,6 +54,6 @@ private:
 	Graphics& gfx;
 
 public:
-	static constexpr int nPoisons = (width * height) / 3;
+	static constexpr int nPoisons = (width * height) / 5;
 	static constexpr int nGoals = 10;
 };

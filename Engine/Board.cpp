@@ -79,30 +79,12 @@ void Board::DrawPoisons(Graphics& gfx) const
 
 void Board::RespawnObstacle(std::mt19937& rng, const Snek& snek)
 {
-	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
-	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
-
-	Location newLoc;
-	do
-	{
-		newLoc = { xDist(rng), yDist(rng) };
-	} while (snek.IsInTile(newLoc) || CheckObstacle(newLoc) || CheckGoal(newLoc));
-
-	hasObstacles[newLoc.y * width + newLoc.x] = true;
+	Respawn(hasObstacles, rng, snek);
 }
 
 void Board::RespawnPoison(std::mt19937& rng, const Snek& snek)
 {
-	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
-	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
-
-	Location newLoc;
-	do
-	{
-		newLoc = { xDist(rng), yDist(rng) };
-	} while (snek.IsInTile(newLoc) || CheckObstacle(newLoc) || CheckGoal(newLoc));
-
-	hasPoisons[newLoc.y * width + newLoc.x] = true;
+	Respawn(hasPoisons, rng, snek);
 }
 
 bool Board::CheckGoal(const Location& loc) const
@@ -122,16 +104,7 @@ void Board::DrawGoals(Graphics& gfx) const
 
 void Board::RespawnGoal(std::mt19937& rng, const Snek& snek)
 {
-	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
-	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
-
-	Location newLoc;
-	do
-	{
-		newLoc = { xDist(rng), yDist(rng) };
-	} while (snek.IsInTile(newLoc) || CheckObstacle(newLoc) || CheckPoison(newLoc));
-
-	hasGoals[newLoc.y * width + newLoc.x] = true;
+	Respawn(hasGoals, rng, snek);
 }
 
 void Board::DrawCells(const bool field[], Color color) const
@@ -146,5 +119,24 @@ void Board::DrawCells(const bool field[], Color color) const
 			}
 		}
 	}
+}
+
+void Board::Respawn(bool field[], std::mt19937& rng, const Snek& snek) const
+{
+	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
+	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
+
+	Location newLoc;
+	do
+	{
+		newLoc = { xDist(rng), yDist(rng) };
+	} while (snek.IsInTile(newLoc) || !IsCellEmpty(newLoc));
+
+	field[newLoc.y * width + newLoc.x] = true;
+}
+
+bool Board::IsCellEmpty(const Location& loc) const
+{
+	return  !(CheckObstacle(loc) || CheckGoal(loc) || CheckPoison(loc));
 }
 
