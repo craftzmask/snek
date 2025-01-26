@@ -1,4 +1,6 @@
 #include "Board.h"
+#include "Snek.h"
+#include "Goal.h"
 
 Board::Board(Graphics& gfx)
 	:
@@ -38,14 +40,47 @@ void Board::DrawBorder() const
 	const int right = left + 2 * (borderWidth + borderPadding) + width * dimension;
 
 	// Draw Top
-	gfx.DrawRectDim(left, top, right - left, borderWidth, Colors::Blue);
+	gfx.DrawRectDim(left, top, right - left, borderWidth, borderColor);
 
 	// Draw Bottom
-	gfx.DrawRectDim(x, bottom - borderWidth, right - left, borderWidth, Colors::Blue);
+	gfx.DrawRectDim(x, bottom - borderWidth, right - left, borderWidth, borderColor);
 
 	// Draw Left
-	gfx.DrawRectDim(x, y, borderWidth, bottom - top, Colors::Blue);
+	gfx.DrawRectDim(x, y, borderWidth, bottom - top, borderColor);
 
 	// Draw Right
-	gfx.DrawRectDim(right - borderWidth, y, borderWidth, bottom - top, Colors::Blue);
+	gfx.DrawRectDim(right - borderWidth, y, borderWidth, bottom - top, borderColor);
+}
+
+bool Board::CheckObstacle(const Location& loc) const
+{
+	return hasObstacles[loc.y * width + loc.x];
+}
+
+void Board::DrawObstacles(Graphics& gfx) const
+{
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			if (hasObstacles[y * width + x])
+			{
+				DrawCell({ x, y }, obstacleColor);
+			}
+		}
+	}
+}
+
+void Board::RespawnObstacle(std::mt19937& rng, const Snek& snek, const Goal& goal)
+{
+	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
+	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
+
+	Location newLoc;
+	do
+	{
+		newLoc = { xDist(rng), yDist(rng) };
+	} while (snek.IsInTile(newLoc) || CheckObstacle(newLoc) || goal.GetLocation() == newLoc);
+
+	hasObstacles[newLoc.y * width + newLoc.x] = true;
 }

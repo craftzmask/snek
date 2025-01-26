@@ -47,16 +47,11 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
-	static constexpr int nRocksMax = 20;
-	static constexpr float rockSpawnPeriod = 5.0f; // spawn a rock every 20 seconds
-	float rockCounterPeriod = 0.0f;
-	int nRocks = 0;
 	FrameTimer ft;
 	std::mt19937 rng;
 	Board brd;
 	Snek snek;
 	Goal goal;
-	Rock rocks[nRocksMax];
 	Location delta_loc = { 1, 0 };
 	static constexpr float snekMovePeriodMin = 0.1f;		// snek moves by 1 location in minimum 0.1 seconds
 	static constexpr float snekSpeedUpFactor = 0.001f;		// reduce time move by this amount

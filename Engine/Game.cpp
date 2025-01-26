@@ -64,7 +64,6 @@ void Game::UpdateModel()
 			delta_loc = { 1, 0 };
 		}
 
-		rockCounterPeriod += dt;
 		snekMoveCounter += dt;
 		goalPeriodCounter += dt;
 
@@ -74,18 +73,9 @@ void Game::UpdateModel()
 
 			const Location next = snek.GetNextHeadLocation(delta_loc);
 			
-			if (!brd.IsInsideBoard(next) || snek.IsInTileExcepEnd(next))
+			if (!brd.IsInsideBoard(next) || snek.IsInTileExcepEnd(next) || brd.CheckObstacle(next))
 			{
 				gameIsOver = true;
-			}
-
-			// Game is over if snek hit any rock
-			for (int i = 0; i < nRocks; ++i)
-			{
-				if (next == rocks[i].GetLocation())
-				{
-					gameIsOver = true;
-				}
 			}
 
 			if (!gameIsOver)
@@ -104,12 +94,9 @@ void Game::UpdateModel()
 					goalPeriodCounter = 0.0f;
 				}
 
-				// Spawn a rock after a period of time
-				if (rockCounterPeriod >= rockSpawnPeriod && nRocks < nRocksMax)
+				if (eating)
 				{
-					rocks[nRocks].Init(rng, brd, snek);
-					++nRocks;
-					rockCounterPeriod = 0.0f;
+					brd.RespawnObstacle(rng, snek, goal);
 				}
 			}
 		}
@@ -127,13 +114,9 @@ void Game::ComposeFrame()
 	if (gameStarted)
 	{
 		brd.DrawBorder();
+		brd.DrawObstacles(gfx);
 		snek.Draw(brd);
 		goal.Draw(brd);
-
-		for (int i = 0; i < nRocks; ++i)
-		{
-			rocks[i].Draw(brd);
-		}
 
 		if (gameIsOver)
 		{
