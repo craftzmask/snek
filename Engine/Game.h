@@ -56,5 +56,6 @@ private:
 	float snekMoveCounter = 0.0f;							// keep track the current time passed to move snek
 	bool gameStarted = false;
 	bool gameIsOver = false;
+	int nObstacles = 0;
 	/********************************/
 };

@@ -98,7 +98,12 @@ void Game::UpdateModel()
 				{
 					brd.DestroyGoal(next);
 					brd.RespawnGoal(rng, snek);
-					brd.RespawnObstacle(rng, snek);
+
+					if (nObstacles < brd.maxNObstacles)
+					{
+						brd.RespawnObstacle(rng, snek);
+						nObstacles++;
+					}
 				}
 
 				if (brd.CheckPoison(next))

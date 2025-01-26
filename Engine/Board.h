@@ -55,5 +55,6 @@ private:
 
 public:
 	static constexpr int nPoisons = (width * height) / 5;
+	static constexpr int maxNObstacles = (width * height) / 10;
 	static constexpr int nGoals = 10;
 };
