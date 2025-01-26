@@ -31,6 +31,10 @@ Game::Game(MainWindow& wnd)
 	snek({5, 5}),
 	goal(rng, brd, snek)
 {
+	for (int i = 0; i < brd.GetNumberOfPoisons(); i++)
+	{
+		brd.RespawnPoison(rng, snek, goal);
+	}
 }
 
 void Game::Go()
@@ -98,10 +102,16 @@ void Game::UpdateModel()
 				{
 					brd.RespawnObstacle(rng, snek, goal);
 				}
+
+				if (brd.CheckPoison(next))
+				{
+					brd.RespawnPoison(rng, snek, goal);
+					snekMovePeriod = std::max(snekMovePeriod - 2.0f * snekSpeedUpFactor, snekMovePeriodMin);
+				}
 			}
 		}
 
-		snekMovePeriod = std::max(snekMovePeriod - dt * snekSpeedUpFactor, snekMovePeriodMin);
+		//snekMovePeriod = std::max(snekMovePeriod - dt * snekSpeedUpFactor, snekMovePeriodMin);
 	}
 	else if (wnd.kbd.KeyIsPressed(VK_RETURN))
 	{
@@ -115,6 +125,7 @@ void Game::ComposeFrame()
 	{
 		brd.DrawBorder();
 		brd.DrawObstacles(gfx);
+		brd.DrawPoisons(gfx);
 		snek.Draw(brd);
 		goal.Draw(brd);
 
