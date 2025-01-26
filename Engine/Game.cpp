@@ -72,7 +72,16 @@ void Game::UpdateModel()
 			delta_loc = { 1, 0 };
 		}
 
-		snekMoveCounter += dt;
+		if (wnd.kbd.KeyIsPressed(VK_SPACE))
+		{
+			snekPowerSpeedUpFactor = 2.0f; // double speed when press key space
+		}
+		else
+		{
+			snekPowerSpeedUpFactor = 1.0f;
+		}
+
+		snekMoveCounter += dt * snekPowerSpeedUpFactor;
 
 		if (snekMoveCounter >= snekMovePeriod)
 		{
