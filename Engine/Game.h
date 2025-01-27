@@ -52,7 +52,7 @@ private:
 	Location delta_loc = { 1, 0 };
 	static constexpr int nPoisons = 150;
 	static constexpr int maxNObstacles = 50;
-	static constexpr int nGoals = 10;
+	static constexpr int nFoods = 10;
 	static constexpr float snekMovePeriodMin = 0.1f;		// snek moves by 1 location in minimum 0.1 seconds
 	static constexpr float snekSpeedUpFactor = 0.001f;		// reduce time move by this amount
 	float snekPowerSpeedUpFactor = 1.0f;					// Increase snek's speed even faster

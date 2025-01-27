@@ -32,12 +32,12 @@ Game::Game(MainWindow& wnd)
 {
 	for (int i = 0; i < nPoisons; i++)
 	{
-		brd.RespawnContent(rng, snek, 3);
+		brd.RespawnContent(rng, snek, Board::CellContents::Poison);
 	}
 
-	for (int i = 0; i < nGoals; i++)
+	for (int i = 0; i < nFoods; i++)
 	{
-		brd.RespawnContent(rng, snek, 1);
+		brd.RespawnContent(rng, snek, Board::CellContents::Food);
 	}
 }
 
@@ -91,30 +91,30 @@ void Game::UpdateModel()
 			
 			if (!brd.IsInsideBoard(next) ||
 				snek.IsInTileExcepEnd(next) ||
-				brd.GetContents(next) == 2)
+				brd.GetContents(next) == Board::CellContents::Obstacle)
 			{
 				gameIsOver = true;
 			}
 
 			if (!gameIsOver)
 			{
-				if (brd.GetContents(next) == 1)
+				if (brd.GetContents(next) == Board::CellContents::Food)
 				{
 					snek.GrowAndMoveBy(delta_loc);
 					brd.ConsumeContent(next);
-					brd.RespawnContent(rng, snek, 1);
+					brd.RespawnContent(rng, snek, Board::CellContents::Food);
 
 					if (nObstacles < maxNObstacles)
 					{
-						brd.RespawnContent(rng, snek, 2);
+						brd.RespawnContent(rng, snek, Board::CellContents::Obstacle);
 						nObstacles++;
 					}
 				}
-				else if (brd.GetContents(next) == 3)
+				else if (brd.GetContents(next) == Board::CellContents::Poison)
 				{
 					snek.MoveBy(delta_loc);
 					brd.ConsumeContent(next);
-					brd.RespawnContent(rng, snek, 3);
+					brd.RespawnContent(rng, snek, Board::CellContents::Poison);
 					snekMovePeriod = std::max(snekMovePeriod - 2.0f * snekSpeedUpFactor, snekMovePeriodMin);
 				}
 				else

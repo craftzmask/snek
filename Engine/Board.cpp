@@ -52,15 +52,15 @@ void Board::DrawBorder() const
 	gfx.DrawRectDim(right - borderWidth, y, borderWidth, bottom - top, borderColor);
 }
 
-int Board::GetContents(const Location& loc) const
+Board::CellContents Board::GetContents(const Location& loc) const
 {
 	return contents[loc.y * width + loc.x];
 }
 
 void Board::ConsumeContent(const Location& loc)
 {
-	assert(GetContents(loc) == 1 || GetContents(loc) == 3);
-	contents[loc.y * width + loc.x] = false;
+	assert(GetContents(loc) == CellContents::Food || GetContents(loc) == CellContents::Poison);
+	contents[loc.y * width + loc.x] = CellContents::Empty;
 }
 
 void Board::DrawCells() const
@@ -69,26 +69,24 @@ void Board::DrawCells() const
 	{
 		for (int x = 0; x < width; x++)
 		{
-			const int content = contents[y * width + x];
 			const Location loc = { x, y };
-
-			if (content == 1)
+			switch (GetContents(loc))
 			{
-				DrawCell(loc, goalColor);
-			}
-			else if (content == 2)
-			{
+			case CellContents::Food:
+				DrawCell(loc, foodColor);
+				break;
+			case CellContents::Obstacle:
 				DrawCell(loc, obstacleColor);
-			}
-			else if (content == 3)
-			{
+				break;
+			case CellContents::Poison:
 				DrawCell(loc, poisonColor);
+				break;
 			}
 		}
 	}
 }
 
-void Board::RespawnContent(std::mt19937& rng, const Snek& snek, int contentType)
+void Board::RespawnContent(std::mt19937& rng, const Snek& snek, CellContents contentType)
 {
 	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
 	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
@@ -97,7 +95,7 @@ void Board::RespawnContent(std::mt19937& rng, const Snek& snek, int contentType)
 	do
 	{
 		newLoc = { xDist(rng), yDist(rng) };
-	} while (snek.IsInTile(newLoc) || contents[newLoc.y * width + newLoc.x] != 0);
+	} while (snek.IsInTile(newLoc) || contents[newLoc.y * width + newLoc.x] != CellContents::Empty);
 
 	contents[newLoc.y * width + newLoc.x] = contentType;
 }
