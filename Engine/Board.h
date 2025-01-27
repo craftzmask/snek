@@ -22,7 +22,7 @@ public:
 private:
 	static constexpr Color borderColor = Colors::Blue;
 	static constexpr Color obstacleColor = Colors::Gray;
-	static constexpr Color poisonColor = Colors::Magenta;
+	static constexpr Color poisonColor = { 64, 8, 64 };
 	static constexpr Color goalColor = Colors::Red;
 	static constexpr int cellPadding = 1;
 	static constexpr int borderWidth = 5;
