@@ -24,6 +24,7 @@ public:
 	Snek(const Location& in_loc);
 	void Draw(Board& brd) const;
 	void MoveBy(const Location& delta_loc);
+	void GrowAndMoveBy(const Location& delta_loc);
 	void Grow();
 	bool TestCollision(const Location& delta_loc) const;
 	bool IsInTile(const Location& target) const;

@@ -14,25 +14,10 @@ public:
 	int GetHeight() const;
 	bool IsInsideBoard(const Location& loc) const;
 	void DrawBorder() const;
-
-	bool CheckObstacle(const Location& loc) const;
-	void DrawObstacles(Graphics& gfx) const;
-	void RespawnObstacle(std::mt19937& rng, const class Snek& snek);
-
-	bool CheckPoison(const Location& loc) const;
-	void DestroyPoison(const Location& loc);
-	void DrawPoisons(Graphics& gfx) const;
-	void RespawnPoison(std::mt19937& rng, const class Snek& snek);
-
-	bool CheckGoal(const Location& loc) const;
-	void DestroyGoal(const Location& loc);
-	void DrawGoals(Graphics& gfx) const;
-	void RespawnGoal(std::mt19937& rng, const class Snek& snek);
-
-private:
-	void DrawCells(const bool field[], Color color) const;
-	void Respawn(bool field[], std::mt19937& rng, const class Snek& snek) const;
-	bool IsCellEmpty(const Location& loc) const;
+	int GetContents(const Location& loc) const;
+	void ConsumeContent(const Location& loc);
+	void DrawCells() const;
+	void RespawnContent(std::mt19937& rng, const class Snek& snek, int contentType);
 
 private:
 	static constexpr Color borderColor = Colors::Blue;
@@ -45,16 +30,8 @@ private:
 	static constexpr int dimension = 20;
 	static constexpr int width = 37;
 	static constexpr int height = 27;
-
 	int x = 20;
 	int y = 20;
-	bool hasObstacles[width * height] = { false };
-	bool hasPoisons[width * height] = { false };
-	bool hasGoals[width * height] = { false };
+	int contents[width * height] = { 0 }; // 0 empty, 1 food, 2 obstacle, 3 poison
 	Graphics& gfx;
-
-public:
-	static constexpr int nPoisons = (width * height) / 5;
-	static constexpr int maxNObstacles = (width * height) / 10;
-	static constexpr int nGoals = 10;
 };

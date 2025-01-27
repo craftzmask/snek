@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "Snek.h"
+#include "assert.h"
 
 Board::Board(Graphics& gfx)
 	:
@@ -51,77 +52,43 @@ void Board::DrawBorder() const
 	gfx.DrawRectDim(right - borderWidth, y, borderWidth, bottom - top, borderColor);
 }
 
-bool Board::CheckObstacle(const Location& loc) const
+int Board::GetContents(const Location& loc) const
 {
-	return hasObstacles[loc.y * width + loc.x];
+	return contents[loc.y * width + loc.x];
 }
 
-bool Board::CheckPoison(const Location& loc) const
+void Board::ConsumeContent(const Location& loc)
 {
-	return hasPoisons[loc.y * width + loc.x];
+	assert(GetContents(loc) == 1 || GetContents(loc) == 3);
+	contents[loc.y * width + loc.x] = false;
 }
 
-void Board::DestroyPoison(const Location& loc)
-{
-	hasPoisons[loc.y * width + loc.x] = false;
-}
-
-void Board::DrawObstacles(Graphics& gfx) const
-{
-	DrawCells(hasObstacles, obstacleColor);
-}
-
-void Board::DrawPoisons(Graphics& gfx) const
-{
-
-	DrawCells(hasPoisons, poisonColor);
-}
-
-void Board::RespawnObstacle(std::mt19937& rng, const Snek& snek)
-{
-	Respawn(hasObstacles, rng, snek);
-}
-
-void Board::RespawnPoison(std::mt19937& rng, const Snek& snek)
-{
-	Respawn(hasPoisons, rng, snek);
-}
-
-bool Board::CheckGoal(const Location& loc) const
-{
-	return hasGoals[loc.y * width + loc.x];
-}
-
-void Board::DestroyGoal(const Location& loc)
-{
-	hasGoals[loc.y * width + loc.x] = false;
-}
-
-void Board::DrawGoals(Graphics& gfx) const
-{
-	DrawCells(hasGoals, goalColor);
-}
-
-void Board::RespawnGoal(std::mt19937& rng, const Snek& snek)
-{
-	Respawn(hasGoals, rng, snek);
-}
-
-void Board::DrawCells(const bool field[], Color color) const
+void Board::DrawCells() const
 {
 	for (int y = 0; y < height; y++)
 	{
 		for (int x = 0; x < width; x++)
 		{
-			if (field[y * width + x])
+			const int content = contents[y * width + x];
+			const Location loc = { x, y };
+
+			if (content == 1)
 			{
-				DrawCell({ x, y }, color);
+				DrawCell(loc, goalColor);
+			}
+			else if (content == 2)
+			{
+				DrawCell(loc, obstacleColor);
+			}
+			else if (content == 3)
+			{
+				DrawCell(loc, poisonColor);
 			}
 		}
 	}
 }
 
-void Board::Respawn(bool field[], std::mt19937& rng, const Snek& snek) const
+void Board::RespawnContent(std::mt19937& rng, const Snek& snek, int contentType)
 {
 	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
 	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
@@ -130,13 +97,8 @@ void Board::Respawn(bool field[], std::mt19937& rng, const Snek& snek) const
 	do
 	{
 		newLoc = { xDist(rng), yDist(rng) };
-	} while (snek.IsInTile(newLoc) || !IsCellEmpty(newLoc));
+	} while (snek.IsInTile(newLoc) || contents[newLoc.y * width + newLoc.x] != 0);
 
-	field[newLoc.y * width + newLoc.x] = true;
-}
-
-bool Board::IsCellEmpty(const Location& loc) const
-{
-	return  !(CheckObstacle(loc) || CheckGoal(loc) || CheckPoison(loc));
+	contents[newLoc.y * width + newLoc.x] = contentType;
 }
 

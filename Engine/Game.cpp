@@ -30,14 +30,14 @@ Game::Game(MainWindow& wnd)
 	rng(std::random_device()()),
 	snek({5, 5})
 {
-	for (int i = 0; i < brd.nPoisons; i++)
+	for (int i = 0; i < nPoisons; i++)
 	{
-		brd.RespawnPoison(rng, snek);
+		brd.RespawnContent(rng, snek, 3);
 	}
 
-	for (int i = 0; i < brd.nGoals; i++)
+	for (int i = 0; i < nGoals; i++)
 	{
-		brd.RespawnGoal(rng, snek);
+		brd.RespawnContent(rng, snek, 1);
 	}
 }
 
@@ -89,37 +89,37 @@ void Game::UpdateModel()
 
 			const Location next = snek.GetNextHeadLocation(delta_loc);
 			
-			if (!brd.IsInsideBoard(next) || snek.IsInTileExcepEnd(next) || brd.CheckObstacle(next))
+			if (!brd.IsInsideBoard(next) ||
+				snek.IsInTileExcepEnd(next) ||
+				brd.GetContents(next) == 2)
 			{
 				gameIsOver = true;
 			}
 
 			if (!gameIsOver)
 			{
-				if (brd.CheckGoal(next))
+				if (brd.GetContents(next) == 1)
 				{
-					snek.Grow();
-				}
+					snek.GrowAndMoveBy(delta_loc);
+					brd.ConsumeContent(next);
+					brd.RespawnContent(rng, snek, 1);
 
-				snek.MoveBy(delta_loc);
-
-				if (brd.CheckGoal(next))
-				{
-					brd.DestroyGoal(next);
-					brd.RespawnGoal(rng, snek);
-
-					if (nObstacles < brd.maxNObstacles)
+					if (nObstacles < maxNObstacles)
 					{
-						brd.RespawnObstacle(rng, snek);
+						brd.RespawnContent(rng, snek, 2);
 						nObstacles++;
 					}
 				}
-
-				if (brd.CheckPoison(next))
+				else if (brd.GetContents(next) == 3)
 				{
-					brd.DestroyPoison(next);
-					brd.RespawnPoison(rng, snek);
+					snek.MoveBy(delta_loc);
+					brd.ConsumeContent(next);
+					brd.RespawnContent(rng, snek, 3);
 					snekMovePeriod = std::max(snekMovePeriod - 2.0f * snekSpeedUpFactor, snekMovePeriodMin);
+				}
+				else
+				{
+					snek.MoveBy(delta_loc);
 				}
 			}
 		}
@@ -135,9 +135,7 @@ void Game::ComposeFrame()
 	if (gameStarted)
 	{
 		brd.DrawBorder();
-		brd.DrawObstacles(gfx);
-		brd.DrawPoisons(gfx);
-		brd.DrawGoals(gfx);
+		brd.DrawCells();
 		snek.Draw(brd);
 
 		if (gameIsOver)

@@ -67,6 +67,12 @@ void Snek::MoveBy(const Location& delta_loc)
 	segments[0].MoveBy(delta_loc);
 }
 
+void Snek::GrowAndMoveBy(const Location& delta_loc)
+{
+	Grow();
+	MoveBy(delta_loc);
+}
+
 void Snek::Grow()
 {
 	if (nSegments < nSegmentsMax)
