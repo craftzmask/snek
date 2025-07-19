@@ -25,6 +25,7 @@
 #include "Graphics.h"
 #include "Board.h"
 #include "Snek.h"
+#include "Goal.h"
 #include <random>
 
 class Game
@@ -49,8 +50,9 @@ private:
 	std::uniform_int_distribution<int> colorDist;
 	Board brd;
 	Snek snek;
+	Goal goal;
 	Location delta_loc = { 0, 0 };
-	static constexpr int nFramesPerMove = 30; // move 1 cell per 30 frames
+	static constexpr int nFramesPerMove = 20; // move 1 cell per 30 frames
 	int nFramesPassed = 0;
 	/********************************/
 };

@@ -28,7 +28,8 @@ Game::Game( MainWindow& wnd )
 	rng(std::random_device()()),
 	colorDist(0, 255),
 	brd(gfx),
-	snek({ 1, 1 })
+	snek({ 1, 1 }),
+	goal({ 3, 3 }, Colors::Red)
 {
 }
 
@@ -62,18 +63,22 @@ void Game::UpdateModel()
 		delta_loc = { 1, 0 };
 	}
 
+	++nFramesPassed;
 	if (nFramesPassed >= nFramesPerMove)
 	{
+		const Location next = snek.GetNextLocation(delta_loc);
+		if (goal.TestCollision(next))
+		{
+			goal.Respawn(brd, snek);
+			snek.Grow();
+		}
 		snek.MoveBy(delta_loc);
 		nFramesPassed = 0;
-	}
-	else
-	{
-		++nFramesPassed;
 	}
 }
 
 void Game::ComposeFrame()
 {
 	snek.Draw(brd);
+	goal.Draw(brd);
 }
