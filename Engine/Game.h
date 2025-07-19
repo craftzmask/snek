@@ -23,6 +23,8 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Graphics.h"
+#include "Board.h"
+#include <random>
 
 class Game
 {
@@ -42,5 +44,8 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	std::mt19937 rng;
+	std::uniform_int_distribution<int> colorDist;
+	Board brd;
 	/********************************/
 };
