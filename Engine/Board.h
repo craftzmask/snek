@@ -11,7 +11,7 @@ public:
 	int GetGridHeight() const;
 private:
 	static constexpr int dimension = 20;
-	static constexpr int width = 20;
-	static constexpr int height = 20;
+	static constexpr int width = Graphics::ScreenWidth / dimension;
+	static constexpr int height = Graphics::ScreenHeight / dimension;
 	Graphics& gfx;
 };

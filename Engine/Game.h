@@ -24,6 +24,7 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "Board.h"
+#include "Snek.h"
 #include <random>
 
 class Game
@@ -47,5 +48,6 @@ private:
 	std::mt19937 rng;
 	std::uniform_int_distribution<int> colorDist;
 	Board brd;
+	Snek snek;
 	/********************************/
 };
