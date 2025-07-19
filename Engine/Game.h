@@ -49,5 +49,8 @@ private:
 	std::uniform_int_distribution<int> colorDist;
 	Board brd;
 	Snek snek;
+	Location delta_loc = { 0, 0 };
+	static constexpr int nFramesPerMove = 30; // move 1 cell per 30 frames
+	int nFramesPassed = 0;
 	/********************************/
 };

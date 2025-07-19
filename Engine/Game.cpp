@@ -42,6 +42,35 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	if (wnd.kbd.KeyIsPressed(VK_UP))
+	{
+		delta_loc = { 0, -1 };
+	}
+
+	if (wnd.kbd.KeyIsPressed(VK_DOWN))
+	{
+		delta_loc = { 0, 1 };
+	}
+
+	if (wnd.kbd.KeyIsPressed(VK_LEFT))
+	{
+		delta_loc = { -1, 0 };
+	}
+
+	if (wnd.kbd.KeyIsPressed(VK_RIGHT))
+	{
+		delta_loc = { 1, 0 };
+	}
+
+	if (nFramesPassed >= nFramesPerMove)
+	{
+		snek.MoveBy(delta_loc);
+		nFramesPassed = 0;
+	}
+	else
+	{
+		++nFramesPassed;
+	}
 }
 
 void Game::ComposeFrame()
