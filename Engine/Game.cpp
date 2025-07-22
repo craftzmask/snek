@@ -69,8 +69,8 @@ void Game::UpdateModel()
 		++nFramesPassed;
 		if (nFramesPassed >= nFramesPerMove)
 		{
-			const Location next = snek.GetNextLocation(delta_loc);
-			if (!brd.IsInsideBoard(next))
+			const Location next = snek.GetNextHeadLocation(delta_loc);
+			if (!brd.IsInsideBoard(next) || snek.IsInTile(next))
 			{
 				gameIsOver = true;
 			}
@@ -81,6 +81,7 @@ void Game::UpdateModel()
 					goal.Respawn(brd, snek);
 					snek.Grow();
 				}
+
 				snek.MoveBy(delta_loc);
 				nFramesPassed = 0;
 			}

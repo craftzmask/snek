@@ -51,8 +51,8 @@ private:
 	Board brd;
 	Snek snek;
 	Goal goal;
-	Location delta_loc = { 0, 0 };
-	static constexpr int nFramesPerMove = 2; // move 1 cell per 30 frames
+	Location delta_loc = { 1, 0 };
+	static constexpr int nFramesPerMove = 20; // move 1 cell per 30 frames
 	int nFramesPassed = 0;
 	bool gameIsOver = false;
 	/********************************/

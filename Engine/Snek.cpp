@@ -32,7 +32,7 @@ void Snek::Segment::Draw(Board& brd) const
 	brd.Draw(loc, c);
 }
 
-Location Snek::Segment::GetLocation() const
+const Location& Snek::Segment::GetLocation() const
 {
 	return loc;
 }
@@ -67,7 +67,19 @@ bool Snek::IsInTile(const Location& loc) const
 {
 	for (int i = 0; i < nSegments; ++i)
 	{
-		if (segments[i].IsInTile(loc))
+		if (segments[i].GetLocation() == loc)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Snek::IsInTileExceptTail(const Location& loc) const
+{
+	for (int i = 0; i < nSegments - 1; ++i)
+	{
+		if (segments[i].GetLocation() == loc)
 		{
 			return true;
 		}
@@ -80,14 +92,9 @@ Location Snek::GetHead() const
 	return segments[0].GetLocation();
 }
 
-Location Snek::GetNextLocation(const Location& delta_loc) const
+Location Snek::GetNextHeadLocation(const Location& delta_loc) const
 {
-	Location next = { GetHead().x + delta_loc.x, GetHead().y + delta_loc.y };
-	return next;
-}
-
-
-bool Snek::Segment::IsInTile(const Location& other) const
-{
-	return loc.x == other.x && loc.y == other.y;
+	Location l(GetHead());
+	l.Add(delta_loc);
+	return l;
 }
