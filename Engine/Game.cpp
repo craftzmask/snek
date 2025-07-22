@@ -78,11 +78,17 @@ void Game::UpdateModel()
 			{
 				if (goal.TestCollision(next))
 				{
-					goal.Respawn(brd, snek);
 					snek.Grow();
 				}
-
+				
 				snek.MoveBy(delta_loc);
+				
+				// If the goal should be respawned after the snek moved
+				if (goal.TestCollision(snek.GetHead()))
+				{
+					goal.Respawn(brd, snek);
+				}
+
 				nFramesPassed = 0;
 			}
 		}
