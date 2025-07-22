@@ -20,6 +20,7 @@
  ******************************************************************************************/
 #include "MainWindow.h"
 #include "Game.h"
+#include "SpriteCodex.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -43,42 +44,56 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if (wnd.kbd.KeyIsPressed(VK_UP))
+	if (!gameIsOver)
 	{
-		delta_loc = { 0, -1 };
-	}
-
-	if (wnd.kbd.KeyIsPressed(VK_DOWN))
-	{
-		delta_loc = { 0, 1 };
-	}
-
-	if (wnd.kbd.KeyIsPressed(VK_LEFT))
-	{
-		delta_loc = { -1, 0 };
-	}
-
-	if (wnd.kbd.KeyIsPressed(VK_RIGHT))
-	{
-		delta_loc = { 1, 0 };
-	}
-
-	++nFramesPassed;
-	if (nFramesPassed >= nFramesPerMove)
-	{
-		const Location next = snek.GetNextLocation(delta_loc);
-		if (goal.TestCollision(next))
+		if (wnd.kbd.KeyIsPressed(VK_UP))
 		{
-			goal.Respawn(brd, snek);
-			snek.Grow();
+			delta_loc = { 0, -1 };
 		}
-		snek.MoveBy(delta_loc);
-		nFramesPassed = 0;
+
+		if (wnd.kbd.KeyIsPressed(VK_DOWN))
+		{
+			delta_loc = { 0, 1 };
+		}
+
+		if (wnd.kbd.KeyIsPressed(VK_LEFT))
+		{
+			delta_loc = { -1, 0 };
+		}
+
+		if (wnd.kbd.KeyIsPressed(VK_RIGHT))
+		{
+			delta_loc = { 1, 0 };
+		}
+
+		++nFramesPassed;
+		if (nFramesPassed >= nFramesPerMove)
+		{
+			const Location next = snek.GetNextLocation(delta_loc);
+			if (!brd.IsInsideBoard(next))
+			{
+				gameIsOver = true;
+			}
+			else
+			{
+				if (goal.TestCollision(next))
+				{
+					goal.Respawn(brd, snek);
+					snek.Grow();
+				}
+				snek.MoveBy(delta_loc);
+				nFramesPassed = 0;
+			}
+		}
 	}
 }
 
 void Game::ComposeFrame()
 {
+	if (gameIsOver)
+	{
+		SpriteCodex::DrawGameOver(300, 300, gfx);
+	}
 	snek.Draw(brd);
 	goal.Draw(brd);
 }

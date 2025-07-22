@@ -9,6 +9,7 @@ public:
 	void Draw(const Location& loc, Color c) const;
 	int GetGridWidth() const;
 	int GetGridHeight() const;
+	bool IsInsideBoard(const Location& loc) const;
 private:
 	static constexpr int dimension = 20;
 	static constexpr int width = Graphics::ScreenWidth / dimension;
