@@ -2,10 +2,11 @@
 
 struct Location
 {
-	void Add(const Location& loc)
+	Location Add(const Location& loc)
 	{
 		x += loc.x;
 		y += loc.y;
+		return { x, y };
 	}
 
 	int x;

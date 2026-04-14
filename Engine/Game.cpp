@@ -64,11 +64,20 @@ void Game::UpdateModel()
 
 	if (currentTime >= periodTimeMove)
 	{
-		snek.MoveBy(deltaLoc);
-		if (brd.TestCollision(snek.GetHead(), food.GetLocation()))
+		Location nextHead = snek.GetHead().Add(deltaLoc);
+		if (brd.TestCollision(nextHead, food.GetLocation()))
 		{
 			snek.GrowUp();
+			snek.MoveBy(deltaLoc);
+			Location loc = { locDist(rng), locDist(rng) };
+			while (snek.IsInTile(loc)) {
+				loc = { locDist(rng), locDist(rng) };
+			}
 			food.Respawn({ locDist(rng), locDist(rng) });
+		}
+		else
+		{
+			snek.MoveBy(deltaLoc);
 		}
 
 		currentTime = 0;

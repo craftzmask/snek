@@ -38,6 +38,17 @@ Location Snek::GetHead() const
 	return segments[0].GetLocation();
 }
 
+bool Snek::IsInTile(const Location& loc) const
+{
+	for (int i = 0; i < nSegments; ++i) {
+		const Location segmentLoc = segments[i].GetLocation();
+		if (segmentLoc.x == loc.x || segmentLoc.y == loc.y) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void Snek::Segment::InitHead(const Location& loc)
 {
 	this->loc = loc;

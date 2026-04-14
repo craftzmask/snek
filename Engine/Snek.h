@@ -26,6 +26,7 @@ public:
 	void MoveBy(const Location& deltaLoc);
 	void GrowUp();
 	Location GetHead() const;
+	bool IsInTile(const Location& loc) const;
 
 private:
 	static constexpr Color headColor = Colors::Yellow;
