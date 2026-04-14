@@ -55,5 +55,6 @@ private:
 	Location deltaLoc = { 0, 0 };
 	int currentTime = 0;
 	int periodTimeMove = 10;
+	bool isGameOver = false;
 	/********************************/
 };

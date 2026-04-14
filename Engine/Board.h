@@ -9,6 +9,7 @@ public:	Board(Graphics& gfx);
 	bool TestCollision(const Location& first, const Location& second);
 	int GetWidth() const;
 	int GetHeight() const;
+	bool IsInside(const Location& loc) const;
 private:
 	static constexpr int dimension = 20;
 	static constexpr int width = 20;

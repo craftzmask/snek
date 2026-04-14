@@ -22,6 +22,7 @@
 #include "Game.h"
 #include <random>
 #include <cmath>
+#include "SpriteCodex.h"
 
 Game::Game( MainWindow& wnd )
 	:
@@ -86,10 +87,22 @@ void Game::UpdateModel()
 	{
 		currentTime++;
 	}
+
+	if (!brd.IsInside(snek.GetHead()))
+	{
+		isGameOver = true;
+	}
 }
 
 void Game::ComposeFrame()
 {
-	snek.Draw(brd);
-	food.Draw(brd);
+	if (isGameOver)
+	{
+		SpriteCodex::DrawGameOver(358, 268, gfx);
+	}
+	else
+	{
+		snek.Draw(brd);
+		food.Draw(brd);
+	}
 }
