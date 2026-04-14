@@ -21,12 +21,17 @@
 #include "MainWindow.h"
 #include "Game.h"
 #include <random>
+#include <cmath>
 
 Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	brd(gfx)
+	rng(rd()),
+	locDist(0, 20),
+	brd(gfx),
+	snek({ 5, 5 }),
+	food({ locDist(rng), locDist(rng) })
 {
 }
 
@@ -40,21 +45,42 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	if (wnd.kbd.KeyIsPressed(VK_UP))
+	{
+		deltaLoc = { 0, -1 };
+	}
+	if (wnd.kbd.KeyIsPressed(VK_DOWN))
+	{
+		deltaLoc = { 0, 1 };
+	}
+	if (wnd.kbd.KeyIsPressed(VK_LEFT))
+	{
+		deltaLoc = { -1, 0 };
+	}
+	if (wnd.kbd.KeyIsPressed(VK_RIGHT))
+	{
+		deltaLoc = { 1, 0 };
+	}
+
+	if (currentTime >= periodTimeMove)
+	{
+		snek.MoveBy(deltaLoc);
+		if (brd.TestCollision(snek.GetHead(), food.GetLocation()))
+		{
+			snek.GrowUp();
+			food.Respawn({ locDist(rng), locDist(rng) });
+		}
+
+		currentTime = 0;
+	}
+	else
+	{
+		currentTime++;
+	}
 }
 
 void Game::ComposeFrame()
 {
-	std::random_device rd;
-	std::mt19937 rng(rd());
-	std::uniform_int_distribution<int> colorDist(0, 255);
-
-	for (int i = 0; i < brd.GetHeight(); i++)
-	{
-		for (int j = 0; j < brd.GetWidth(); j++)
-		{
-			Location loc = { j, i };
-			Color c(colorDist(rng), colorDist(rng), colorDist(rng));
-			brd.DrawCell(loc, c);
-		}
-	}
+	snek.Draw(brd);
+	food.Draw(brd);
 }

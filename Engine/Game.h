@@ -24,6 +24,9 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "Board.h"
+#include "Snek.h"
+#include "Food.h"
+#include <random>
 
 class Game
 {
@@ -43,6 +46,14 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	std::random_device rd;
+	std::mt19937 rng;
+	std::uniform_int_distribution<int> locDist;
 	Board brd;
+	Snek snek;
+	Food food;
+	Location deltaLoc = { 0, 0 };
+	int currentTime = 0;
+	int periodTimeMove = 10;
 	/********************************/
 };
