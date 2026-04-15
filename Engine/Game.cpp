@@ -63,34 +63,35 @@ void Game::UpdateModel()
 		deltaLoc = { 1, 0 };
 	}
 
+	currentTime++;
 	if (currentTime >= periodTimeMove)
 	{
-		Location nextHead = snek.GetHead().Add(deltaLoc);
-		if (brd.TestCollision(nextHead, food.GetLocation()))
+		Location head = snek.GetHead();
+		Location nextHead = head.Add(deltaLoc);
+
+		if (!brd.IsInside(nextHead) || snek.IsInTile(nextHead))
 		{
-			snek.GrowUp();
-			snek.MoveBy(deltaLoc);
-			Location loc = { locDist(rng), locDist(rng) };
-			while (snek.IsInTile(loc)) {
-				loc = { locDist(rng), locDist(rng) };
-			}
-			food.Respawn({ locDist(rng), locDist(rng) });
+			isGameOver = true;
 		}
 		else
 		{
-			snek.MoveBy(deltaLoc);
+			if (brd.TestCollision(nextHead, food.GetLocation()))
+			{
+				snek.GrowUp();
+				snek.MoveBy(deltaLoc);
+				Location loc = { locDist(rng), locDist(rng) };
+				while (snek.IsInTile(loc)) {
+					loc = { locDist(rng), locDist(rng) };
+				}
+				food.Respawn({ locDist(rng), locDist(rng) });
+			}
+			else
+			{
+				snek.MoveBy(deltaLoc);
+			}
 		}
 
 		currentTime = 0;
-	}
-	else
-	{
-		currentTime++;
-	}
-
-	if (!brd.IsInside(snek.GetHead()))
-	{
-		isGameOver = true;
 	}
 }
 

@@ -28,7 +28,6 @@ void Snek::GrowUp()
 	if (nSegments < nSegnmentMax)
 	{
 		segments[nSegments].InitBody();
-		segments[nSegments].Follow(segments[nSegments - 1]);
 		++nSegments;
 	}
 }
@@ -40,9 +39,9 @@ Location Snek::GetHead() const
 
 bool Snek::IsInTile(const Location& loc) const
 {
-	for (int i = 0; i < nSegments; ++i) {
+	for (int i = 1; i < nSegments; ++i) {
 		const Location segmentLoc = segments[i].GetLocation();
-		if (segmentLoc.x == loc.x || segmentLoc.y == loc.y) {
+		if (segmentLoc.x == loc.x && segmentLoc.y == loc.y) {
 			return true;
 		}
 	}
