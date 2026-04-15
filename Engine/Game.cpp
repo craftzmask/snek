@@ -68,7 +68,7 @@ void Game::UpdateModel()
 		if (snekMoveCounter >= snekMovePeriod)
 		{
 			const Location nextHead = snek.GetNextHeadLocation(deltaLoc);
-			if (!brd.IsInside(nextHead) || snek.IsInTile(nextHead))
+			if (!brd.IsInside(nextHead) || snek.IsInTileExceptTail(nextHead))
 			{
 				isGameOver = true;
 			}

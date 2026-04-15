@@ -50,6 +50,20 @@ bool Snek::IsInTile(const Location& loc) const
 	return false;
 }
 
+// Prevent the next head touch the tail because next head
+// may touch the tail which has not been moved up yet
+// causing the wrong detection
+bool Snek::IsInTileExceptTail(const Location& loc) const
+{
+	for (int i = 0; i < nSegments - 1; ++i) {
+		const Location segmentLoc = segments[i].GetLocation();
+		if (segmentLoc.x == loc.x && segmentLoc.y == loc.y) {
+			return true;
+		}
+	}
+	return false;
+}
+
 void Snek::Segment::InitHead(const Location& loc)
 {
 	this->loc = loc;

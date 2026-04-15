@@ -26,6 +26,7 @@ public:
 	void MoveBy(const Location& deltaLoc);
 	void GrowUp();
 	bool IsInTile(const Location& loc) const;
+	bool IsInTileExceptTail(const Location& loc) const;
 	Location GetNextHeadLocation(const Location& deltaLoc) const;
 
 private:
