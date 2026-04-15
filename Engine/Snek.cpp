@@ -32,14 +32,16 @@ void Snek::GrowUp()
 	}
 }
 
-Location Snek::GetHead() const
+Location Snek::GetNextHeadLocation(const Location& deltaLoc) const
 {
-	return segments[0].GetLocation();
+	Location loc(segments[0].GetLocation());
+	loc.Add(deltaLoc);
+	return loc;
 }
 
 bool Snek::IsInTile(const Location& loc) const
 {
-	for (int i = 1; i < nSegments; ++i) {
+	for (int i = 0; i < nSegments; ++i) {
 		const Location segmentLoc = segments[i].GetLocation();
 		if (segmentLoc.x == loc.x && segmentLoc.y == loc.y) {
 			return true;
@@ -66,8 +68,7 @@ void Snek::Segment::MoveBy(const Location& loc)
 
 void Snek::Segment::Follow(const Segment& next)
 {
-	loc.x = next.loc.x;
-	loc.y = next.loc.y;
+	loc = next.loc;
 }
 
 void Snek::Segment::Draw(Board& brd) const
@@ -75,7 +76,7 @@ void Snek::Segment::Draw(Board& brd) const
 	brd.DrawCell(loc, c);
 }
 
-Location Snek::Segment::GetLocation() const
+const Location& Snek::Segment::GetLocation() const
 {
 	return loc;
 }

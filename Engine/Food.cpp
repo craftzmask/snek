@@ -1,8 +1,8 @@
 #include "Food.h"
 
-Food::Food(const Location& loc)
+Food::Food(std::mt19937& rng, const Board& brd, const Snek& snek)
 {
-	this->loc = loc;
+	Respawn(rng, brd, snek);
 }
 
 void Food::Draw(Board& brd) const
@@ -10,12 +10,22 @@ void Food::Draw(Board& brd) const
 	brd.DrawCell(loc, c);
 }
 
-void Food::Respawn(const Location& loc)
+void Food::Respawn(std::mt19937& rng, const Board& brd, const Snek& snek)
 {
-	this->loc = loc;
+	std::uniform_int_distribution<int> xDist(0, brd.GetWidth());
+	std::uniform_int_distribution<int> yDist(0, brd.GetHeight());
+	
+	Location newLoc;
+	do
+	{
+		newLoc.x = xDist(rng);
+		newLoc.y = yDist(rng);
+	} while (snek.IsInTile(newLoc));
+
+	loc = newLoc;
 }
 
-Location Food::GetLocation() const
+const Location& Food::GetLocation() const
 {
 	return loc;
 }

@@ -29,10 +29,9 @@ Game::Game( MainWindow& wnd )
 	wnd( wnd ),
 	gfx( wnd ),
 	rng(rd()),
-	locDist(0, 20),
 	brd(gfx),
 	snek({ 5, 5 }),
-	food({ locDist(rng), locDist(rng) })
+	food(rng, brd, snek)
 {
 }
 
@@ -46,52 +45,49 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if (wnd.kbd.KeyIsPressed(VK_UP))
+	if (!isGameOver)
 	{
-		deltaLoc = { 0, -1 };
-	}
-	if (wnd.kbd.KeyIsPressed(VK_DOWN))
-	{
-		deltaLoc = { 0, 1 };
-	}
-	if (wnd.kbd.KeyIsPressed(VK_LEFT))
-	{
-		deltaLoc = { -1, 0 };
-	}
-	if (wnd.kbd.KeyIsPressed(VK_RIGHT))
-	{
-		deltaLoc = { 1, 0 };
-	}
-
-	currentTime++;
-	if (currentTime >= periodTimeMove)
-	{
-		Location head = snek.GetHead();
-		Location nextHead = head.Add(deltaLoc);
-
-		if (!brd.IsInside(nextHead) || snek.IsInTile(nextHead))
+		if (wnd.kbd.KeyIsPressed(VK_UP))
 		{
-			isGameOver = true;
+			deltaLoc = { 0, -1 };
 		}
-		else
+		if (wnd.kbd.KeyIsPressed(VK_DOWN))
 		{
-			if (brd.TestCollision(nextHead, food.GetLocation()))
+			deltaLoc = { 0, 1 };
+		}
+		if (wnd.kbd.KeyIsPressed(VK_LEFT))
+		{
+			deltaLoc = { -1, 0 };
+		}
+		if (wnd.kbd.KeyIsPressed(VK_RIGHT))
+		{
+			deltaLoc = { 1, 0 };
+		}
+
+		snekMoveCounter++;
+		if (snekMoveCounter >= snekMovePeriod)
+		{
+			const Location nextHead = snek.GetNextHeadLocation(deltaLoc);
+			if (!brd.IsInside(nextHead) || snek.IsInTile(nextHead))
 			{
-				snek.GrowUp();
-				snek.MoveBy(deltaLoc);
-				Location loc = { locDist(rng), locDist(rng) };
-				while (snek.IsInTile(loc)) {
-					loc = { locDist(rng), locDist(rng) };
-				}
-				food.Respawn({ locDist(rng), locDist(rng) });
+				isGameOver = true;
 			}
 			else
 			{
-				snek.MoveBy(deltaLoc);
+				if (nextHead == food.GetLocation())
+				{
+					snek.GrowUp();
+					snek.MoveBy(deltaLoc);
+					food.Respawn(rng, brd, snek);
+				}
+				else
+				{
+					snek.MoveBy(deltaLoc);
+				}
 			}
-		}
 
-		currentTime = 0;
+			snekMoveCounter = 0;
+		}
 	}
 }
 

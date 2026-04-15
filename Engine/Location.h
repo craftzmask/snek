@@ -9,6 +9,11 @@ struct Location
 		return { x, y };
 	}
 
+	bool operator == (const Location& rhs) const
+	{
+		return x == rhs.x && y == rhs.y;
+	}
+
 	int x;
 	int y;
 };

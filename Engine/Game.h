@@ -48,13 +48,12 @@ private:
 	/*  User Variables              */
 	std::random_device rd;
 	std::mt19937 rng;
-	std::uniform_int_distribution<int> locDist;
 	Board brd;
 	Snek snek;
 	Food food;
-	Location deltaLoc = { 0, 0 };
-	int currentTime = 0;
-	int periodTimeMove = 10;
+	Location deltaLoc = { 1, 0 };
+	int snekMoveCounter = 0;
+	int snekMovePeriod = 10;
 	bool isGameOver = false;
 	/********************************/
 };
