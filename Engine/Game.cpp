@@ -93,6 +93,8 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
+	brd.DrawBorders();
+
 	if (isGameOver)
 	{
 		SpriteCodex::DrawGameOver(358, 268, gfx);
