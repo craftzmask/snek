@@ -17,7 +17,7 @@ private:
 	static constexpr int width = 35;
 	static constexpr int height = 25;
 	static constexpr int borderThick = 10;
-	static constexpr int padding = 5;
+	static constexpr int padding = 1;
 	static constexpr Color borderColor = Colors::Blue;
 	Graphics& gfx;
 };
