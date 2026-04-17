@@ -8,36 +8,30 @@ Board::Board(Graphics& gfx)
 
 void Board::DrawCell(const Location& loc, Color c)
 {
-	const int x0 = x + padding + loc.x * dimension;
-	const int x1 = x0 + dimension - 2 * padding;
-
-	const int y0 = y + padding + loc.y * dimension;
-	const int y1 = y0 + dimension - 2 * padding;
-
-	gfx.DrawRect(x0, y0, x1, y1, c);
+	const int offsetX = x + borderPadding + borderThick + cellPadding;
+	const int offsetY = y + borderPadding + borderThick + cellPadding;
+	const int cellSize = dimension - 2 * cellPadding;
+	gfx.DrawRectDim(offsetX + loc.x * dimension, offsetY + loc.y * dimension, cellSize, cellSize, c);
 }
 
 void Board::DrawBorders() const
 {
 	const int top = y;
+	const int bottom = y + dimension * height +  2 * (borderThick + borderPadding);
 	const int left = x;
-	const int right = x + dimension * width;
-	const int bottom = y + dimension * height;
-
-	const int boardWidth = dimension * width;
-	const int boardHeight = dimension * height;
+	const int right = x + dimension * width + 2 * (borderThick + borderPadding);
 
 	// top
-	gfx.DrawRect(left - borderThick, top, left + boardWidth + borderThick, top - borderThick, borderColor);
+	gfx.DrawRect(left, top, right, top + borderThick, borderColor);
 
 	// right
-	gfx.DrawRect(left + boardWidth, top - borderThick, left + boardWidth + borderThick, top + boardHeight + borderThick, borderColor);
+	gfx.DrawRect(right - borderThick, top, right, bottom, borderColor);
 
 	// bottom
-	gfx.DrawRect(left - borderThick, bottom, left + boardWidth + borderThick, bottom + borderThick, borderColor);
+	gfx.DrawRect(left, bottom, right, bottom - borderThick, borderColor);
 
 	// left
-	gfx.DrawRect(left, top - borderThick, left - borderThick, top + boardHeight + borderThick, borderColor);
+	gfx.DrawRect(left, top, left + borderThick, bottom, borderColor);
 }
 
 int Board::GetWidth() const
