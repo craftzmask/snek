@@ -55,5 +55,6 @@ private:
 	int snekMoveCounter = 0;
 	int snekMovePeriod = 10;
 	bool isGameOver = false;
+	bool isGameStarted = false;
 	/********************************/
 };

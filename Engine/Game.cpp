@@ -45,63 +45,74 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if (!isGameOver)
+	if (isGameStarted)
 	{
-		if (wnd.kbd.KeyIsPressed(VK_UP))
+		if (!isGameOver)
 		{
-			deltaLoc = { 0, -1 };
-		}
-		if (wnd.kbd.KeyIsPressed(VK_DOWN))
-		{
-			deltaLoc = { 0, 1 };
-		}
-		if (wnd.kbd.KeyIsPressed(VK_LEFT))
-		{
-			deltaLoc = { -1, 0 };
-		}
-		if (wnd.kbd.KeyIsPressed(VK_RIGHT))
-		{
-			deltaLoc = { 1, 0 };
-		}
-
-		snekMoveCounter++;
-		if (snekMoveCounter >= snekMovePeriod)
-		{
-			const Location nextHead = snek.GetNextHeadLocation(deltaLoc);
-			if (!brd.IsInside(nextHead) || snek.IsInTileExceptTail(nextHead))
+			if (wnd.kbd.KeyIsPressed(VK_UP))
 			{
-				isGameOver = true;
+				deltaLoc = { 0, -1 };
 			}
-			else
+			if (wnd.kbd.KeyIsPressed(VK_DOWN))
 			{
-				if (nextHead == food.GetLocation())
+				deltaLoc = { 0, 1 };
+			}
+			if (wnd.kbd.KeyIsPressed(VK_LEFT))
+			{
+				deltaLoc = { -1, 0 };
+			}
+			if (wnd.kbd.KeyIsPressed(VK_RIGHT))
+			{
+				deltaLoc = { 1, 0 };
+			}
+
+			snekMoveCounter++;
+			if (snekMoveCounter >= snekMovePeriod)
+			{
+				const Location nextHead = snek.GetNextHeadLocation(deltaLoc);
+				if (!brd.IsInside(nextHead) || snek.IsInTileExceptTail(nextHead))
 				{
-					snek.GrowUp();
-					snek.MoveBy(deltaLoc);
-					food.Respawn(rng, brd, snek);
+					isGameOver = true;
 				}
 				else
 				{
-					snek.MoveBy(deltaLoc);
+					if (nextHead == food.GetLocation())
+					{
+						snek.GrowUp();
+						snek.MoveBy(deltaLoc);
+						food.Respawn(rng, brd, snek);
+					}
+					else
+					{
+						snek.MoveBy(deltaLoc);
+					}
 				}
-			}
 
-			snekMoveCounter = 0;
+				snekMoveCounter = 0;
+			}
 		}
 	}
+	else {
+		isGameStarted = wnd.kbd.KeyIsPressed(VK_RETURN);
+	}
+	
 }
 
 void Game::ComposeFrame()
 {
-	brd.DrawBorders();
-
-	if (isGameOver)
+	if (isGameStarted)
 	{
-		SpriteCodex::DrawGameOver(358, 268, gfx);
+		brd.DrawBorders();
+		snek.Draw(brd);
+		food.Draw(brd);
+
+		if (isGameOver)
+		{
+			SpriteCodex::DrawGameOver(358, 268, gfx);
+		}
 	}
 	else
 	{
-		snek.Draw(brd);
-		food.Draw(brd);
+		SpriteCodex::DrawTitle(325, 212, gfx);
 	}
 }
