@@ -26,6 +26,7 @@
 #include "Board.h"
 #include "Snek.h"
 #include "Food.h"
+#include "Obsolete.h"
 #include <random>
 
 class Game
@@ -40,6 +41,7 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
+	void UpdateObsoletes();
 	/********************************/
 private:
 	MainWindow& wnd;
@@ -52,6 +54,11 @@ private:
 	Snek snek;
 	Food food;
 	Location deltaLoc = { 1, 0 };
+
+	static constexpr int nObsoleteMax = 20;
+	int nObsoletes = 0;
+	Obsolete obsoletes[nObsoleteMax];
+
 	int snekMoveCounter = 0;
 	int snekMovePeriod = 10;
 	bool isGameOver = false;

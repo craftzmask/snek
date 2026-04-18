@@ -148,6 +148,7 @@
     <ClInclude Include="Location.h" />
     <ClInclude Include="MainWindow.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Obsolete.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Snek.h" />
     <ClInclude Include="SpriteCodex.h" />
@@ -162,6 +163,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="Obsolete.cpp" />
     <ClCompile Include="Snek.cpp" />
     <ClCompile Include="SpriteCodex.cpp" />
   </ItemGroup>
