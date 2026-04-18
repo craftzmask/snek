@@ -142,6 +142,6 @@ void Game::ComposeFrame()
 	}
 	else
 	{
-		SpriteCodex::DrawTitle(325, 212, gfx);
+		SpriteCodex::DrawTitle(293, 220, gfx);
 	}
 }
