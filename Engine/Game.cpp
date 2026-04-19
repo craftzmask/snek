@@ -22,6 +22,7 @@
 #include "Game.h"
 #include <random>
 #include <cmath>
+#include <algorithm>
 #include "SpriteCodex.h"
 
 Game::Game( MainWindow& wnd )
@@ -98,10 +99,16 @@ void Game::UpdateModel()
 							snek.MoveBy(deltaLoc);
 						}
 					}
-
 				}
 
 				snekMoveCounter = 0;
+			}
+
+			snekSpeedUpCounter++;
+			if (snekSpeedUpCounter >= snekSpeedUpPeriod)
+			{
+				snekSpeedUpCounter = 0;
+				snekMovePeriod = std::max(monitorHert / 10, snekMovePeriod - 1);
 			}
 		}
 	}
