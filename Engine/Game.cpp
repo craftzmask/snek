@@ -46,6 +46,8 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	const float dt = ft.Mark();
+
 	if (isGameStarted)
 	{
 		if (!isGameOver)
@@ -67,7 +69,7 @@ void Game::UpdateModel()
 				deltaLoc = { 1, 0 };
 			}
 
-			snekMoveCounter++;
+			snekMoveCounter += dt;
 			if (snekMoveCounter >= snekMovePeriod)
 			{
 				const Location nextHead = snek.GetNextHeadLocation(deltaLoc);
@@ -101,14 +103,14 @@ void Game::UpdateModel()
 					}
 				}
 
-				snekMoveCounter = 0;
+				snekMoveCounter = 0.0f;
 			}
-
-			snekSpeedUpCounter++;
+			
+			snekSpeedUpCounter += dt;
 			if (snekSpeedUpCounter >= snekSpeedUpPeriod)
 			{
-				snekSpeedUpCounter = 0;
-				snekMovePeriod = std::max(monitorHert / 10, snekMovePeriod - 1);
+				snekSpeedUpCounter = snekSpeedUpPeriod - snekSpeedUpCounter;
+				snekMovePeriod = std::max(snekMovePeriod - 0.01f, minSnekSpeedUpPeriod);
 			}
 		}
 	}

@@ -27,6 +27,7 @@
 #include "Snek.h"
 #include "Food.h"
 #include "Obsolete.h"
+#include "FrameTimer.h"
 #include <random>
 
 class Game
@@ -55,17 +56,18 @@ private:
 	Food food;
 	Location deltaLoc = { 1, 0 };
 
+	FrameTimer ft;
+
 	static constexpr int nObsoleteMax = 20;
 	int nObsoletes = 0;
 	Obsolete obsoletes[nObsoleteMax];
-
-	static constexpr int monitorHert = 180;
 	
-	int snekMoveCounter = 0;
-	int snekMovePeriod = monitorHert / 3;
+	float snekMoveCounter = 0.0f;
+	float snekMovePeriod = 0.2f;
 
-	int snekSpeedUpPeriod = monitorHert * 10; // speed up each 10 seconds
-	int snekSpeedUpCounter = 0;
+	float snekSpeedUpCounter = 0.0f;
+	static constexpr float snekSpeedUpPeriod = 10.0f;
+	static constexpr float minSnekSpeedUpPeriod = 0.08f;
 
 	bool isGameOver = false;
 	bool isGameStarted = false;
