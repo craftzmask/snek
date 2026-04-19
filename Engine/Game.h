@@ -59,8 +59,9 @@ private:
 	int nObsoletes = 0;
 	Obsolete obsoletes[nObsoleteMax];
 
+	static constexpr int monitorHert = 180;
 	int snekMoveCounter = 0;
-	int snekMovePeriod = 10;
+	int snekMovePeriod = monitorHert / 3;
 	bool isGameOver = false;
 	bool isGameStarted = false;
 	/********************************/
