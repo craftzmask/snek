@@ -73,33 +73,23 @@ void Game::UpdateModel()
 			if (snekMoveCounter >= snekMovePeriod)
 			{
 				const Location nextHead = snek.GetNextHeadLocation(deltaLoc);
-				if (!brd.IsInside(nextHead) || snek.IsInTileExceptTail(nextHead))
+				if (!brd.IsInside(nextHead) || snek.IsInTileExceptTail(nextHead) || brd.HasObstacles(nextHead))
 				{
 					isGameOver = true;
 				}
-				else
-				{
-					for (int i = 0; i < nObsoletes; i++)
-					{
-						if (nextHead == obsoletes[i].GetLocation())
-						{
-							isGameOver = true;
-						}
-					}
 
-					if (!isGameOver)
+				if (!isGameOver)
+				{
+					if (nextHead == food.GetLocation())
 					{
-						if (nextHead == food.GetLocation())
-						{
-							snek.GrowUp();
-							snek.MoveBy(deltaLoc);
-							food.Respawn(rng, brd, snek);
-							UpdateObsoletes();
-						}
-						else
-						{
-							snek.MoveBy(deltaLoc);
-						}
+						snek.GrowUp();
+						snek.MoveBy(deltaLoc);
+						food.Respawn(rng, brd, snek);
+						brd.UpdateObstacles(rng, snek, food);
+					}
+					else
+					{
+						snek.MoveBy(deltaLoc);
 					}
 				}
 
@@ -121,25 +111,12 @@ void Game::UpdateModel()
 	
 }
 
-void Game::UpdateObsoletes()
-{
-	std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-	if (dist(rng) <= 0.25) {
-		obsoletes[nObsoletes].Respawn(rng, brd, snek, food);
-		nObsoletes++;
-	}
-}
-
 void Game::ComposeFrame()
 {
 	if (isGameStarted)
 	{
 		brd.DrawBorders();
-		
-		for (int i = 0; i < nObsoletes; i++)
-		{
-			obsoletes[i].Draw(brd);
-		}
+		brd.DrawObstacles();
 
 		snek.Draw(brd);
 		food.Draw(brd);

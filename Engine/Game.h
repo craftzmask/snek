@@ -42,7 +42,6 @@ private:
 	void UpdateModel();
 	/********************************/
 	/*  User Functions              */
-	void UpdateObsoletes();
 	/********************************/
 private:
 	MainWindow& wnd;
@@ -57,10 +56,6 @@ private:
 	Location deltaLoc = { 1, 0 };
 
 	FrameTimer ft;
-
-	static constexpr int nObsoleteMax = 20;
-	int nObsoletes = 0;
-	Obsolete obsoletes[nObsoleteMax];
 	
 	float snekMoveCounter = 0.0f;
 	float snekMovePeriod = 0.2f;

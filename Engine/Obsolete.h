@@ -12,6 +12,6 @@ public:
 	void Respawn(std::mt19937& rng, const Board& brd, const Snek& snek, const Food& food);
 	const Location& GetLocation() const;
 private:
-	Location loc;
+	Location loc = { 0, 0 };
 	Color c = Colors::Gray;
 };

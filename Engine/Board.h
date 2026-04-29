@@ -1,15 +1,19 @@
 #pragma once
 #include "Graphics.h"
 #include "Location.h"
+#include <random>
 
 class Board
 {
 public:	Board(Graphics& gfx);
-	void DrawCell(const Location& loc, Color c);
+	void DrawCell(const Location& loc, Color c) const;
 	void DrawBorders() const;
+	void DrawObstacles() const;
 	int GetWidth() const;
 	int GetHeight() const;
 	bool IsInside(const Location& loc) const;
+	bool HasObstacles(const Location& loc) const;
+	void UpdateObstacles(std::mt19937& rng, const class Snek& snek, const class Food& goal);
 private:
 	static constexpr int x = 20;
 	static constexpr int y = 20;
@@ -20,5 +24,7 @@ private:
 	static constexpr int borderPadding = 2;
 	static constexpr int cellPadding = 1;
 	static constexpr Color borderColor = Colors::Blue;
+	static constexpr Color obstacleColor = Colors::Gray;
+	bool hasObstacles[width * height] = { false };
 	Graphics& gfx;
 };
