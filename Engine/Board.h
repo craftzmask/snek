@@ -19,6 +19,7 @@ public:	Board(Graphics& gfx);
 
 	void InitPoisons(std::mt19937& rng, const Snek& snek, const Food& food);
 	bool HasPoisons(const Location& loc) const;
+	void RemovePoison(const Location& loc);
 private:
 	static constexpr int x = 20;
 	static constexpr int y = 20;
@@ -28,7 +29,9 @@ private:
 	static constexpr int borderThick = 10;
 	static constexpr int borderPadding = 2;
 	static constexpr int cellPadding = 1;
-	static constexpr int nPoisions = int(0.35 * width * height);
+	// Number of poisons should be on the board in term of percent
+	static constexpr float poisonCoveragePercent = 0.35;
+	static constexpr int nPoisions = int(poisonCoveragePercent * width * height);
 	static constexpr Color borderColor = Colors::Blue;
 	static constexpr Color obstacleColor = Colors::Gray;
 	static constexpr Color poisonColor = Colors::Magenta;

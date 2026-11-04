@@ -61,8 +61,8 @@ private:
 	float snekMovePeriod = 0.2f;
 
 	float snekSpeedUpCounter = 0.0f;
-	static constexpr float snekSpeedUpPeriod = 10.0f;
-	static constexpr float minSnekSpeedUpPeriod = 0.08f;
+	float snekSpeedUpPeriod = 10.0f;
+	static constexpr float minSnekSpeedUpPeriod = 0.008f;
 
 	bool isGameOver = false;
 	bool isGameStarted = false;

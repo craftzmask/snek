@@ -81,6 +81,12 @@ void Game::UpdateModel()
 
 				if (!isGameOver)
 				{
+					if (brd.HasPoisons(nextHead))
+					{
+						snekMovePeriod = std::max(snekMovePeriod - 0.001f, minSnekSpeedUpPeriod);
+						brd.RemovePoison(nextHead);
+					}
+
 					if (nextHead == food.GetLocation())
 					{
 						snek.GrowUp();

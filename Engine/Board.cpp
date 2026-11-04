@@ -121,5 +121,10 @@ void Board::InitPoisons(std::mt19937& rng, const Snek& snek, const Food& food)
 
 bool Board::HasPoisons(const Location& loc) const
 {
-	return false;
+	return hasPoisons[loc.y * width + loc.x];
+}
+
+void Board::RemovePoison(const Location& loc)
+{
+	hasPoisons[loc.y * width + loc.x] = false;
 }
