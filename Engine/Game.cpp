@@ -34,6 +34,7 @@ Game::Game( MainWindow& wnd )
 	snek({ 5, 5 }),
 	food(rng, brd, snek)
 {
+	brd.InitPoisons(rng, snek, food);
 }
 
 void Game::Go()
@@ -117,6 +118,7 @@ void Game::ComposeFrame()
 	{
 		brd.DrawBorders();
 		brd.DrawObstacles();
+		brd.DrawPoisons();
 
 		snek.Draw(brd);
 		food.Draw(brd);

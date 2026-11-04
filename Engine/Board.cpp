@@ -51,6 +51,21 @@ void Board::DrawObstacles() const
 	}
 }
 
+void Board::DrawPoisons() const
+{
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			const Location loc = { x, y };
+			if (hasPoisons[y * width + x])
+			{
+				DrawCell(loc, poisonColor);
+			}
+		}
+	}
+}
+
 int Board::GetWidth() const
 {
 	return width;
@@ -84,4 +99,27 @@ void Board::UpdateObstacles(std::mt19937& rng, const Snek& snek, const Food& foo
 	} while (snek.IsInTile(newLoc) || food.GetLocation() == newLoc || HasObstacles(newLoc));
 
 	hasObstacles[newLoc.y * width + newLoc.x] = true;
+}
+
+void Board::InitPoisons(std::mt19937& rng, const Snek& snek, const Food& food)
+{
+	for (int i = 0; i < nPoisions; i++)
+	{
+		std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
+		std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
+
+		Location newLoc;
+		do
+		{
+			newLoc.x = xDist(rng);
+			newLoc.y = yDist(rng);
+		} while (HasPoisons(newLoc) || snek.IsInTile(newLoc) || food.GetLocation() == newLoc);
+
+		hasPoisons[newLoc.y * width + newLoc.x] = true;
+	}
+}
+
+bool Board::HasPoisons(const Location& loc) const
+{
+	return false;
 }
