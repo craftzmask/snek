@@ -25,8 +25,6 @@
 #include "Graphics.h"
 #include "Board.h"
 #include "Snek.h"
-#include "Food.h"
-#include "Obsolete.h"
 #include "FrameTimer.h"
 #include <random>
 
@@ -52,7 +50,6 @@ private:
 	std::mt19937 rng;
 	Board brd;
 	Snek snek;
-	Food food;
 	Location deltaLoc = { 1, 0 };
 
 	FrameTimer ft;

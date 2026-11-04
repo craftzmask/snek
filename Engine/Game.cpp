@@ -31,10 +31,10 @@ Game::Game( MainWindow& wnd )
 	gfx( wnd ),
 	rng(rd()),
 	brd(gfx),
-	snek({ 5, 5 }),
-	food(rng, brd, snek)
+	snek({ 5, 5 })
 {
-	brd.InitPoisons(rng, snek, food);
+	brd.InitFoods(rng, snek);
+	brd.InitPoisons(rng, snek);
 }
 
 void Game::Go()
@@ -87,12 +87,13 @@ void Game::UpdateModel()
 						brd.RemovePoison(nextHead);
 					}
 
-					if (nextHead == food.GetLocation())
+					if (brd.HasFoods(nextHead))
 					{
 						snek.GrowUp();
 						snek.MoveBy(deltaLoc);
-						food.Respawn(rng, brd, snek);
-						brd.UpdateObstacles(rng, snek, food);
+						brd.SpawnFood(rng, snek);
+						brd.RemoveFood(nextHead);
+						brd.UpdateObstacles(rng, snek);
 					}
 					else
 					{
@@ -125,9 +126,9 @@ void Game::ComposeFrame()
 		brd.DrawBorders();
 		brd.DrawObstacles();
 		brd.DrawPoisons();
+		brd.DrawFoods();
 
-		snek.Draw(brd);
-		food.Draw(brd);
+		snek.Draw(brd);;
 
 		if (isGameOver)
 		{
