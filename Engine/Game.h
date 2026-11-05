@@ -55,11 +55,12 @@ private:
 	FrameTimer ft;
 	
 	float snekMoveCounter = 0.0f;
-	float snekMovePeriod = 0.2f;
+	float snekMovePeriod = 0.3f;
 
 	float snekSpeedUpCounter = 0.0f;
 	float snekSpeedUpPeriod = 10.0f;
 	static constexpr float minSnekSpeedUpPeriod = 0.008f;
+	static constexpr float snekSpeedBooster = 0.1f;
 
 	bool isGameOver = false;
 	bool isGameStarted = false;

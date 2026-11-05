@@ -69,9 +69,15 @@ void Game::UpdateModel()
 			{
 				deltaLoc = { 1, 0 };
 			}
+			
+			float finalSnekMovePeriod = snekMovePeriod;
+			if (wnd.kbd.KeyIsPressed(VK_SPACE) && snekMovePeriod - snekSpeedBooster >= 0.0)
+			{
+				finalSnekMovePeriod = std::min(snekMovePeriod, snekMovePeriod - snekSpeedBooster);
+			}
 
 			snekMoveCounter += dt;
-			if (snekMoveCounter >= snekMovePeriod)
+			if (snekMoveCounter >= finalSnekMovePeriod)
 			{
 				const Location nextHead = snek.GetNextHeadLocation(deltaLoc);
 				if (!brd.IsInside(nextHead) || snek.IsInTileExceptTail(nextHead) || brd.HasObstacles(nextHead))
