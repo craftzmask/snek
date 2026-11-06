@@ -60,9 +60,6 @@
     <ClInclude Include="Snek.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Obsolete.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="FrameTimer.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -1,6 +1,5 @@
 #include "Board.h"
 #include "Snek.h"
-#include "Food.h"
 
 Board::Board(Graphics& gfx)
 	:
