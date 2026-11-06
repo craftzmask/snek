@@ -41,7 +41,7 @@ private:
 	static constexpr int nFoods = 10;
 	static constexpr Color borderColor = Colors::Blue;
 	static constexpr Color obstacleColor = Colors::Gray;
-	static constexpr Color poisonColor = Colors::Magenta;
+	static constexpr Color poisonColor = Color(57, 0, 55);
 	static constexpr Color foodColor = Colors::Red;
 	bool hasObstacles[width * height] = { false };
 	bool hasPoisons[width * height] = { false };
