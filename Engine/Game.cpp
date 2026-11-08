@@ -33,8 +33,7 @@ Game::Game( MainWindow& wnd )
 	brd(gfx),
 	snek({ 5, 5 })
 {
-	brd.InitFoods(rng, snek);
-	brd.InitPoisons(rng, snek);
+	brd.Init(rng, snek);
 }
 
 void Game::Go()
@@ -80,31 +79,32 @@ void Game::UpdateModel()
 			if (snekMoveCounter >= finalSnekMovePeriod)
 			{
 				const Location nextHead = snek.GetNextHeadLocation(deltaLoc);
-				if (!brd.IsInside(nextHead) || snek.IsInTileExceptTail(nextHead) || brd.HasObstacles(nextHead))
+				const int content = brd.GetContent(nextHead);
+				if (!brd.IsInside(nextHead) || snek.IsInTileExceptTail(nextHead) || content == 1)
 				{
 					isGameOver = true;
 				}
 
 				if (!isGameOver)
 				{
-					if (brd.HasPoisons(nextHead))
+					if (content == 3)
 					{
 						snekMovePeriod = std::max(snekMovePeriod - 0.001f, minSnekSpeedUpPeriod);
-						brd.RemovePoison(nextHead);
 					}
 
-					if (brd.HasFoods(nextHead))
+					if (content == 2)
 					{
 						snek.GrowUp();
 						snek.MoveBy(deltaLoc);
-						brd.SpawnFood(rng, snek);
-						brd.RemoveFood(nextHead);
-						brd.UpdateObstacles(rng, snek);
+						brd.SpawnContent(rng, snek, 2);
+						brd.SpawnContent(rng, snek, 1);
 					}
 					else
 					{
 						snek.MoveBy(deltaLoc);
 					}
+
+					brd.ConsumeContent(nextHead);
 				}
 
 				snekMoveCounter = 0.0f;
@@ -130,10 +130,7 @@ void Game::ComposeFrame()
 	if (isGameStarted)
 	{
 		brd.DrawBorders();
-		brd.DrawObstacles();
-		brd.DrawPoisons();
-		brd.DrawFoods();
-
+		brd.DrawCells();
 		snek.Draw(brd);;
 
 		if (isGameOver)

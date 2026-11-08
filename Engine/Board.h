@@ -7,25 +7,15 @@ class Board
 {
 public:	Board(Graphics& gfx);
 	void DrawCell(const Location& loc, Color c) const;
+	void DrawCells() const;
 	void DrawBorders() const;
-	void DrawObstacles() const;
-	void DrawPoisons() const;
-	void DrawFoods() const;
-
 	int GetWidth() const;
 	int GetHeight() const;
 	bool IsInside(const Location& loc) const;
-	bool HasObstacles(const Location& loc) const;
-	void UpdateObstacles(std::mt19937& rng, const class Snek& snek);
-
-	void InitPoisons(std::mt19937& rng, const Snek& snek);
-	bool HasPoisons(const Location& loc) const;
-	void RemovePoison(const Location& loc);
-
-	void InitFoods(std::mt19937& rng, const Snek& snek);
-	bool HasFoods(const Location& loc) const;
-	void RemoveFood(const Location& loc);
-	void SpawnFood(std::mt19937& rng, const Snek& snek);
+	void Init(std::mt19937& rng, const class Snek& snek);
+	int GetContent(const Location& loc) const;
+	void ConsumeContent(const Location& loc);
+	void SpawnContent(std::mt19937& rng, const class Snek& snek, int contentType);
 private:
 	static constexpr int x = 20;
 	static constexpr int y = 20;
@@ -43,8 +33,7 @@ private:
 	static constexpr Color obstacleColor = Colors::Gray;
 	static constexpr Color poisonColor = Color(57, 0, 55);
 	static constexpr Color foodColor = Colors::Red;
-	bool hasObstacles[width * height] = { false };
-	bool hasPoisons[width * height] = { false };
-	bool hasFood[width * height] = { false };
+	// 0: empty, 1: obstacle, 2: food, 3: poison
+	int contents[width * height] = { 0 };
 	Graphics& gfx;
 };

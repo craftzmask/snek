@@ -35,51 +35,6 @@ void Board::DrawBorders() const
 	gfx.DrawRect(left, top, left + borderThick, bottom, borderColor);
 }
 
-void Board::DrawObstacles() const
-{
-	for (int y = 0; y < height; y++)
-	{
-		for (int x = 0; x < width; x++)
-		{
-			const Location loc = { x, y };
-			if (hasObstacles[y * width + x])
-			{
-				DrawCell(loc, obstacleColor);
-			}
-		}
-	}
-}
-
-void Board::DrawPoisons() const
-{
-	for (int y = 0; y < height; y++)
-	{
-		for (int x = 0; x < width; x++)
-		{
-			const Location loc = { x, y };
-			if (hasPoisons[y * width + x])
-			{
-				DrawCell(loc, poisonColor);
-			}
-		}
-	}
-}
-
-void Board::DrawFoods() const
-{
-	for (int y = 0; y < height; y++)
-	{
-		for (int x = 0; x < width; x++)
-		{
-			const Location loc = { x, y };
-			if (hasFood[y * width + x])
-			{
-				DrawCell(loc, foodColor);
-			}
-		}
-	}
-}
-
 int Board::GetWidth() const
 {
 	return width;
@@ -95,12 +50,17 @@ bool Board::IsInside(const Location& loc) const
 	return loc.x >= 0 && loc.x < width && loc.y >= 0 && loc.y < height;
 }
 
-bool Board::HasObstacles(const Location& loc) const
+int Board::GetContent(const Location& loc) const
 {
-	return hasObstacles[loc.y * width + loc.x];
+	return contents[loc.y * width + loc.x];
 }
 
-void Board::UpdateObstacles(std::mt19937& rng, const Snek& snek)
+void Board::ConsumeContent(const Location& loc)
+{
+	contents[loc.y * width + loc.x] = 0;
+}
+
+void Board::SpawnContent(std::mt19937& rng, const Snek& snek, int contentType)
 {
 	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
 	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
@@ -110,68 +70,44 @@ void Board::UpdateObstacles(std::mt19937& rng, const Snek& snek)
 	{
 		newLoc.x = xDist(rng);
 		newLoc.y = yDist(rng);
-	} while (snek.IsInTile(newLoc) || HasObstacles(newLoc) || HasFoods(newLoc) || HasPoisons(newLoc));
+	} while (snek.IsInTile(newLoc) || GetContent(newLoc) != 0);
 
-	hasObstacles[newLoc.y * width + newLoc.x] = true;
+	contents[newLoc.y * width + newLoc.x] = contentType;
 }
 
-void Board::InitPoisons(std::mt19937& rng, const Snek& snek)
+void Board::DrawCells() const
+{
+	for (int y = 0; y < height; y++)
+	{
+		for (int x = 0; x < width; x++)
+		{
+			const Location loc = { x, y };
+			const int content = contents[y * width + x];
+			if (content == 1)
+			{
+				DrawCell(loc, obstacleColor);
+			}
+			else if (content == 2)
+			{
+				DrawCell(loc, foodColor);
+			}
+			else if (content == 3)
+			{
+				DrawCell(loc, poisonColor);
+			}
+		}
+	}
+}
+
+void Board::Init(std::mt19937& rng, const Snek& snek)
 {
 	for (int i = 0; i < nPoisions; i++)
 	{
-		std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
-		std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
-
-		Location newLoc;
-		do
-		{
-			newLoc.x = xDist(rng);
-			newLoc.y = yDist(rng);
-		} while (HasPoisons(newLoc) || snek.IsInTile(newLoc) || HasFoods(newLoc));
-
-		hasPoisons[newLoc.y * width + newLoc.x] = true;
+		SpawnContent(rng, snek, 3);
 	}
-}
-
-bool Board::HasPoisons(const Location& loc) const
-{
-	return hasPoisons[loc.y * width + loc.x];
-}
-
-void Board::RemovePoison(const Location& loc)
-{
-	hasPoisons[loc.y * width + loc.x] = false;
-}
-
-void Board::InitFoods(std::mt19937& rng, const Snek& snek)
-{
 	for (int i = 0; i < nFoods; i++)
 	{
-		SpawnFood(rng, snek);
+		SpawnContent(rng, snek, 2);
 	}
 }
 
-bool Board::HasFoods(const Location& loc) const
-{
-	return hasFood[loc.y * width + loc.x];
-}
-
-void Board::RemoveFood(const Location& loc)
-{
-	hasFood[loc.y * width + loc.x] = false;
-}
-
-void Board::SpawnFood(std::mt19937& rng, const Snek& snek)
-{
-	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
-	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
-
-	Location newLoc;
-	do
-	{
-		newLoc.x = xDist(rng);
-		newLoc.y = yDist(rng);
-	} while (HasPoisons(newLoc) || snek.IsInTile(newLoc) || HasObstacles(newLoc));
-
-	hasFood[newLoc.y * width + newLoc.x] = true;
-}
