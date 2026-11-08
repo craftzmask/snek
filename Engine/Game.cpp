@@ -69,15 +69,17 @@ void Game::UpdateModel()
 				deltaLoc = { 1, 0 };
 			}
 			
-			float finalSnekMovePeriod = snekMovePeriod;
-			if (wnd.kbd.KeyIsPressed(VK_SPACE) && snekMovePeriod - snekSpeedBooster >= 0.0)
+			float snekModifiedMovePeriod = snekMovePeriod;
+			if (wnd.kbd.KeyIsPressed(VK_SPACE))
 			{
-				finalSnekMovePeriod = std::min(snekMovePeriod, snekMovePeriod - snekSpeedBooster);
+				snekModifiedMovePeriod = std::min(snekMovePeriod, snekMovePeriodSpeedup);
 			}
 
 			snekMoveCounter += dt;
-			if (snekMoveCounter >= finalSnekMovePeriod)
+			if (snekMoveCounter >= snekModifiedMovePeriod)
 			{
+				snekMoveCounter -= snekModifiedMovePeriod;
+
 				const Location nextHead = snek.GetNextHeadLocation(deltaLoc);
 				const int content = brd.GetContent(nextHead);
 				if (!brd.IsInside(nextHead) || snek.IsInTileExceptTail(nextHead) || content == 1)
@@ -89,7 +91,7 @@ void Game::UpdateModel()
 				{
 					if (content == 3)
 					{
-						snekMovePeriod = std::max(snekMovePeriod - 0.001f, minSnekSpeedUpPeriod);
+						snekMovePeriod = std::max(snekMovePeriod * snekSpeedupFactor, snekMovePeriodMin);
 					}
 
 					if (content == 2)
@@ -106,15 +108,6 @@ void Game::UpdateModel()
 
 					brd.ConsumeContent(nextHead);
 				}
-
-				snekMoveCounter = 0.0f;
-			}
-			
-			snekSpeedUpCounter += dt;
-			if (snekSpeedUpCounter >= snekSpeedUpPeriod)
-			{
-				snekSpeedUpCounter = snekSpeedUpPeriod - snekSpeedUpCounter;
-				snekMovePeriod = std::max(snekMovePeriod - 0.01f, minSnekSpeedUpPeriod);
 			}
 		}
 	}
