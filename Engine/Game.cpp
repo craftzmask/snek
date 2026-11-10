@@ -81,25 +81,25 @@ void Game::UpdateModel()
 				snekMoveCounter -= snekModifiedMovePeriod;
 
 				const Location nextHead = snek.GetNextHeadLocation(deltaLoc);
-				const int content = brd.GetContent(nextHead);
-				if (!brd.IsInside(nextHead) || snek.IsInTileExceptTail(nextHead) || content == 1)
+				const Board::ContentType content = brd.GetContent(nextHead);
+				if (!brd.IsInside(nextHead) || snek.IsInTileExceptTail(nextHead) || content == Board::ContentType::Obstacle)
 				{
 					isGameOver = true;
 				}
 
 				if (!isGameOver)
 				{
-					if (content == 3)
+					if (content == Board::ContentType::Poison)
 					{
 						snekMovePeriod = std::max(snekMovePeriod * snekSpeedupFactor, snekMovePeriodMin);
 					}
 
-					if (content == 2)
+					if (content == Board::ContentType::Food)
 					{
 						snek.GrowUp();
 						snek.MoveBy(deltaLoc);
-						brd.SpawnContent(rng, snek, 2);
-						brd.SpawnContent(rng, snek, 1);
+						brd.SpawnContent(rng, snek, Board::ContentType::Food);
+						brd.SpawnContent(rng, snek, Board::ContentType::Obstacle);
 					}
 					else
 					{

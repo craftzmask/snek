@@ -50,17 +50,17 @@ bool Board::IsInside(const Location& loc) const
 	return loc.x >= 0 && loc.x < width && loc.y >= 0 && loc.y < height;
 }
 
-int Board::GetContent(const Location& loc) const
+Board::ContentType Board::GetContent(const Location& loc) const
 {
 	return contents[loc.y * width + loc.x];
 }
 
 void Board::ConsumeContent(const Location& loc)
 {
-	contents[loc.y * width + loc.x] = 0;
+	contents[loc.y * width + loc.x] = ContentType::Empty;
 }
 
-void Board::SpawnContent(std::mt19937& rng, const Snek& snek, int contentType)
+void Board::SpawnContent(std::mt19937& rng, const Snek& snek, ContentType contentType)
 {
 	std::uniform_int_distribution<int> xDist(0, GetWidth() - 1);
 	std::uniform_int_distribution<int> yDist(0, GetHeight() - 1);
@@ -70,7 +70,7 @@ void Board::SpawnContent(std::mt19937& rng, const Snek& snek, int contentType)
 	{
 		newLoc.x = xDist(rng);
 		newLoc.y = yDist(rng);
-	} while (snek.IsInTile(newLoc) || GetContent(newLoc) != 0);
+	} while (snek.IsInTile(newLoc) || GetContent(newLoc) != ContentType::Empty);
 
 	contents[newLoc.y * width + newLoc.x] = contentType;
 }
@@ -82,16 +82,16 @@ void Board::DrawCells() const
 		for (int x = 0; x < width; x++)
 		{
 			const Location loc = { x, y };
-			const int content = contents[y * width + x];
-			if (content == 1)
+			const ContentType content = contents[y * width + x];
+			if (content == ContentType::Obstacle)
 			{
 				DrawCell(loc, obstacleColor);
 			}
-			else if (content == 2)
+			else if (content == ContentType::Food)
 			{
 				DrawCell(loc, foodColor);
 			}
-			else if (content == 3)
+			else if (content == ContentType::Poison)
 			{
 				DrawCell(loc, poisonColor);
 			}
@@ -103,11 +103,11 @@ void Board::Init(std::mt19937& rng, const Snek& snek)
 {
 	for (int i = 0; i < nPoisions; i++)
 	{
-		SpawnContent(rng, snek, 3);
+		SpawnContent(rng, snek, ContentType::Poison);
 	}
 	for (int i = 0; i < nFoods; i++)
 	{
-		SpawnContent(rng, snek, 2);
+		SpawnContent(rng, snek, ContentType::Food);
 	}
 }
 

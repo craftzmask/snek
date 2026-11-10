@@ -5,6 +5,15 @@
 
 class Board
 {
+public:
+	enum class ContentType
+	{
+		Empty,
+		Food,
+		Obstacle,
+		Poison
+	};
+
 public:	Board(Graphics& gfx);
 	void DrawCell(const Location& loc, Color c) const;
 	void DrawCells() const;
@@ -13,9 +22,9 @@ public:	Board(Graphics& gfx);
 	int GetHeight() const;
 	bool IsInside(const Location& loc) const;
 	void Init(std::mt19937& rng, const class Snek& snek);
-	int GetContent(const Location& loc) const;
+	ContentType GetContent(const Location& loc) const;
 	void ConsumeContent(const Location& loc);
-	void SpawnContent(std::mt19937& rng, const class Snek& snek, int contentType);
+	void SpawnContent(std::mt19937& rng, const class Snek& snek, ContentType contentType);
 private:
 	static constexpr int x = 20;
 	static constexpr int y = 20;
@@ -34,6 +43,6 @@ private:
 	static constexpr Color poisonColor = Color(57, 0, 55);
 	static constexpr Color foodColor = Colors::Red;
 	// 0: empty, 1: obstacle, 2: food, 3: poison
-	int contents[width * height] = { 0 };
+	ContentType contents[width * height] = { ContentType::Empty };
 	Graphics& gfx;
 };
