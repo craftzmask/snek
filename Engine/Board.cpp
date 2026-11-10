@@ -82,18 +82,17 @@ void Board::DrawCells() const
 		for (int x = 0; x < width; x++)
 		{
 			const Location loc = { x, y };
-			const ContentType content = contents[y * width + x];
-			if (content == ContentType::Obstacle)
+			switch (GetContent(loc))
 			{
+			case ContentType::Obstacle:
 				DrawCell(loc, obstacleColor);
-			}
-			else if (content == ContentType::Food)
-			{
+				break;
+			case ContentType::Food:
 				DrawCell(loc, foodColor);
-			}
-			else if (content == ContentType::Poison)
-			{
+				break;
+			case ContentType::Poison:
 				DrawCell(loc, poisonColor);
+				break;
 			}
 		}
 	}

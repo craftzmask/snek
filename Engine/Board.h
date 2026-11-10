@@ -42,7 +42,6 @@ private:
 	static constexpr Color obstacleColor = Colors::Gray;
 	static constexpr Color poisonColor = Color(57, 0, 55);
 	static constexpr Color foodColor = Colors::Red;
-	// 0: empty, 1: obstacle, 2: food, 3: poison
 	ContentType contents[width * height] = { ContentType::Empty };
 	Graphics& gfx;
 };
