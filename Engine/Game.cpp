@@ -97,15 +97,11 @@ void Game::UpdateModel()
 					if (content == Board::ContentType::Food)
 					{
 						snek.GrowUp();
-						snek.MoveBy(deltaLoc);
 						brd.SpawnContent(rng, snek, Board::ContentType::Food);
 						brd.SpawnContent(rng, snek, Board::ContentType::Obstacle);
 					}
-					else
-					{
-						snek.MoveBy(deltaLoc);
-					}
 
+					snek.MoveBy(deltaLoc);
 					brd.ConsumeContent(nextHead);
 				}
 			}
